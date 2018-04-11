@@ -1,2 +1,3 @@
 /TripPlanner/build/
-/TripPlanner/nbproject/private/
+/TripPlanner/dist/
+/TripPlanner/nbproject/private/**
