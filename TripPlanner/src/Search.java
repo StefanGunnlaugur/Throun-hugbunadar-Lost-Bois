@@ -1,27 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
+import java.util.Date;
+import search.Flight;
+import search.Hotel;
+import search.Tour;
 /**
  *
  * @author Palli
  */
 public class Search {
-    private Object[] flights;
-    private Object[] hotels;
-    private Object[] tours;
+    private Flight[] flights;
+    private Hotel[] hotels;
+    private Tour[] tours;
     
-    private String startDate;
-    private String endDate;
-    
-    private Object location;
-    
-    private double price;
-    private double rating;
-    
-    private String photo;
+    private Date startDate, enddate;   
 
     /**
      * @param args the command line arguments
@@ -35,7 +26,7 @@ public class Search {
         startDate = "April 2, 2018";
         endDate = "April 6, 2018";
     }
-    
+    /*
     public Object getLocation() {
         return location;
     }
@@ -46,7 +37,7 @@ public class Search {
     
     public String getEndDate() {
         return endDate;
-    }
+    } */
     
     public String FlightSearchMock() {
         // Væri Flight klasi sem sá hópur gerir
@@ -63,9 +54,9 @@ public class Search {
         return "Reykjavik";
     }
     
-/*
-    public createTrips(flights[], hotels[], tours[]) {
-        
-    }
-*/
+    /*
+    public createTrips(Flight[] flights, Hotel[] hotels, Tour[] tours) {
+        CreateTrips(flights)
+    }*/
+   
 }
