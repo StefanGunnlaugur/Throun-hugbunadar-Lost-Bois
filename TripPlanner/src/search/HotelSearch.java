@@ -14,6 +14,7 @@ import java.util.Date;
 public class HotelSearch {
 
     // Talar við db hjá hinum hópunum 
+    private Hotel[] hotels; 
     private Date startDate, enddate;
 
     

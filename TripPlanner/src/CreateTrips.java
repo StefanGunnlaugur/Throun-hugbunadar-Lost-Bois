@@ -2,9 +2,9 @@
 import java.util.ArrayList;
 import java.util.Date;
 import java.lang.*;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import search.Flight;
 import search.Hotel;
 import search.Tour;
@@ -61,13 +61,38 @@ public class CreateTrips {
         return (dist);
     }
     
+    // Ath hvort dagsetningar eru sama dag, diff er skekkuumörk á deinni degi
+    private boolean isSameDay (Date date1, Date date2, int diff) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        
+        for (int i = 0; i <= diff; i++) {
+            Date datePlus = new Date( date2.getTime() + diff*86400000);
+            Date dateMinus = new Date( date2.getTime() - diff*86400000);
+            // Ath með skekkjumörkum, annars ekki 
+            if (fmt.format(date1).equals(fmt.format(datePlus))) {
+                return true;
+            }
+            if (fmt.format(date1).equals(fmt.format(dateMinus))) {
+                return true;
+            }
+        }
+        
+        return fmt.format(date1).equals(fmt.format(date2));
+    }
+    
     // Ath hvort dagsetningar virka, dist er vegalengir milli staða
     // hægt að ca. út hvað meikar sense sem tími/vegalengd
-    private boolean CheckDate(Date fSD, Date fED, Date hSD, Date hED, Date tSD, Date tED, double[] dist ) {
+    private boolean CheckDate(Date fSD, Date fED, Date hSD, Date hED, Date tSD, Date tED, double[] dist, long fDuration ) {
         // útfæra 
+        // Ath - flug + tími flugs < hótel, ferð < brottför
+        long mis = 1800000L; // 30 min
+        Date fArrival = new Date(fSD.getTime() + fDuration + mis + (long)dist[2]*60000);
         
-        
-        
+        // Tour er á milli flugtíma, og hotel er +-1 dag í kringum flug
+        if ( tSD.after(fArrival) && tED.before(fED) 
+                && isSameDay(fArrival, hSD, 1) && isSameDay(fED, hED, 1)) {
+            return true;
+        }        
         return false;
     }
     
@@ -95,8 +120,9 @@ public class CreateTrips {
                         Date fSD = flight.getSD(), fED= flight.getED();                        
                         Date hSD = hotel.getSD(), hED= hotel.getED();
                         Date tSD = tour.getSD(), tED= tour.getED();
+                        long fDuration = flight.getDuration(); 
                         
-                        if (CheckDate( fSD, fED, hSD, hED, tSD, tED, dist)) {
+                        if (CheckDate( fSD, fED, hSD, hED, tSD, tED, dist, fDuration)) {
                             Trip trip = CreateTrip(flight, hotel, tour);
                             trips.add(trip);
                         }                        
@@ -106,11 +132,4 @@ public class CreateTrips {
         }
      return null;   
     }
-
-   
-    
-    
-    
-    
-    
 }

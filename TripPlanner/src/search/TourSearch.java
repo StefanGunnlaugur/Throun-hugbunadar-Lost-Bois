@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class TourSearch {
     // Talar við db hjá hinum hópunum 
-    
+    private Tour[] tours; 
     private Date startDate, enddate;
     
     public TourSearch() {
