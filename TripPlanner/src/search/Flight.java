@@ -2,23 +2,22 @@ package search;
 
 import java.util.Date;
 
-/**
- *
- * @author Ísak
- */
 public class Flight extends TravelingObject {
-    private String seatnr;
-    private long duration;  
+    private String seatnr, departure;
+    private int duration; 
 
-    public Flight(String ID, Date SD, Date ED, double lat, double lon, double price, double rating, String seatnr, long duration) {
-        super(ID, SD, ED, lat, lon, price, rating);
+    public Flight(String ID, Date SD, Date ED, String location, 
+            double audltPrice, double childPrice, double rating,
+            String departure, String seatnr, int duration) {
+        super(ID, SD, ED, location, audltPrice, childPrice, rating);
         this.seatnr = seatnr; 
+        this.departure = departure; 
         this.duration = duration; 
     }
         
     // Skilar tíma flugs í ms
     public long getDuration() {
-        return duration; 
+        return duration*(long)60000; 
     }
     
     // Skilar tíma flugs í ms

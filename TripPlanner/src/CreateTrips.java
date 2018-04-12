@@ -1,18 +1,9 @@
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.lang.*;
+import java.util.*;
+import search.*;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import search.Flight;
-import search.Hotel;
-import search.Tour;
 
-/**
- *
- * @author Ísak
- */
+
 public class CreateTrips {
     private final Flight[] flights;
     private final Hotel[] hotels;
@@ -87,7 +78,7 @@ public class CreateTrips {
         // Ath - flug + tími flugs < hótel, ferð < brottför
         long mis = 1800000L; // 30 min
         Date fArrival = new Date(fSD.getTime() + fDuration + mis + (long)dist[2]*60000);
-        
+              
         // Tour er á milli flugtíma, og hotel er +-1 dag í kringum flug
         if ( tSD.after(fArrival) && tED.before(fED) 
                 && isSameDay(fArrival, hSD, 1) && isSameDay(fED, hED, 1)) {
@@ -96,21 +87,11 @@ public class CreateTrips {
         return false;
     }
     
-    private Trip CreateTrip(Flight flight, Hotel hotel, Tour tour) {
-        Date SD = Collections.min(Arrays.asList(flight.getSD(), hotel.getSD(), tour.getSD()));
-        Date ED = Collections.max(Arrays.asList(flight.getED(), hotel.getED(), tour.getED()));
-        double price = flight.getPrice() + hotel.getPrice() + tour.getPrice();
-        double rating = (flight.getRating() + hotel.getRating() + tour.getRating()) / 3 ;
-        String img = tour.getImg();
-        
-        Trip currTrip = new Trip(SD, ED, flight, hotel, tour, price, rating, img);
-        return currTrip; 
-    }
-        
     public ArrayList<Trip> generateTrips() {
         for(Flight flight:flights ) {
             for (Hotel hotel:hotels) {
                 for (Tour tour:tours) {
+                    
                     double fLat = flight.getLat(), fLon= flight.getLon();
                     double hLat = hotel.getLat(), hLon= hotel.getLon();
                     double tLat = tour.getLat(), tLon= tour.getLon();
@@ -121,15 +102,14 @@ public class CreateTrips {
                         Date hSD = hotel.getSD(), hED= hotel.getED();
                         Date tSD = tour.getSD(), tED= tour.getED();
                         long fDuration = flight.getDuration(); 
-                        
                         if (CheckDate( fSD, fED, hSD, hED, tSD, tED, dist, fDuration)) {
-                            Trip trip = CreateTrip(flight, hotel, tour);
+                            Trip trip = new Trip(flight, hotel, tour);
                             trips.add(trip);
                         }                        
                     }
                 }
             }
         }
-     return null;   
+     return trips;   
     }
 }

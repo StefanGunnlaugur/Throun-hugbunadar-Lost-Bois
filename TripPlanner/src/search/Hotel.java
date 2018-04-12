@@ -2,15 +2,12 @@ package search;
 
 import java.util.Date;
 
-/**
- *
- * @author Ísak
- */
 public class Hotel extends TravelingObject {
     private int roomnr;
 
-    public Hotel(String ID, Date SD, Date ED, double lat, double lon, double price, double rating, int roomnr) {
-        super(ID, SD, ED, lat, lon, price, rating);
+    public Hotel(String ID, Date SD, Date ED, String location, 
+            double audltPrice, double childPrice, double rating, int roomnr) {
+        super(ID, SD, ED, location, audltPrice, childPrice, rating);
         this.roomnr = roomnr; 
     }
 

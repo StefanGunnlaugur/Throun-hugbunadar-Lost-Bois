@@ -2,19 +2,16 @@ package search;
 
 import java.util.Date;
 
-/**
- *
- * @author Ísak
- */
 public class Tour extends TravelingObject {
-   private String img;
+   private int duration; 
 
-    public Tour(String ID, Date SD, Date ED, double lat, double lon, double price, double rating, String img) {
-        super(ID, SD, ED, lat, lon, price, rating);
-        this.img = img; 
+    public Tour(String ID, Date SD, Date ED, String location, 
+            double audltPrice, double childPrice, double rating, int duration) {
+        super(ID, SD, ED, location, audltPrice, childPrice, rating);
+        this.duration = duration; 
     }
 
-    public String getImg() {
-        return img; 
+    public int getDuration() {
+        return duration; 
     }
 }
