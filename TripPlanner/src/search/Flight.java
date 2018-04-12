@@ -6,11 +6,11 @@ public class Flight extends TravelingObject {
     private String seatnr, departureLocation, airline;
     private int duration; 
 
-    public Flight(String ID, Date SD, Date ED, String location, 
+    public Flight(String ID, Date date, String location, 
             double audltPrice, double childPrice, double rating,
             String departureLocation, String  airline, String seatnr, int duration) {
         
-        super(ID, SD, ED, location, audltPrice, childPrice, rating);
+        super(ID, date, date, location, audltPrice, childPrice, rating);
         
         this.seatnr = seatnr; 
         this.departureLocation = departureLocation; 
@@ -30,6 +30,10 @@ public class Flight extends TravelingObject {
     
     public String getAirline() {
         return airline;
+    }
+    
+    public String getDepartureLocation() {
+        return departureLocation;
     }
 
 }

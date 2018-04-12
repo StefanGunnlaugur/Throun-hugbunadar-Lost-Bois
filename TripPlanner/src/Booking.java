@@ -14,6 +14,15 @@ public class Booking {
         this.date = new Date(); 
     }
     
+    public boolean Book() {
+        // Book - flight
+        // Book - hotel
+        // Book - Tour
+        // Save to DB ???? --- sammt ves 
+        // Send email
+        return true;
+    }
+    
     public void sendEmail() {
         // Senda staðfestingu
     }

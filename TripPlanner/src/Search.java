@@ -6,7 +6,7 @@ import search.*;
 
 public class Search {
 
-    private String location;
+    private String location, departureLocation;
     private Date startDate, endDate; 
     
     public Search() {
@@ -14,6 +14,7 @@ public class Search {
         this.startDate = new Date();
         this.endDate = new Date(startDate.getTime() + 7*86400000);
         this.location = "";
+        this.departureLocation = ""; 
     }
 
     /**
@@ -23,10 +24,15 @@ public class Search {
     public static void main(String[] args) throws ParseException {
         Date date1 = new Date(1528675200000L);
         Date date2 = new Date(1528695200000L);
+        Search search = new Search();
+        
+        search.setStartDate(date1);
+        search.setEndDate(date2);
+        search.setLocation("Reykjavík");
         
         // Leitar eftir og býr til ferðrir sem meika sense
         // notum dags. til að sækja í gg. hjá hinum
-        ArrayList<Trip> trips = Search(date1, date2);
+        ArrayList<Trip> trips = search.findTrips();
 
         // Prófa filteringu á max verði og min einkunn
         Results res = new Results();
@@ -41,11 +47,12 @@ public class Search {
         System.out.println(res.filter(trips));
     }
     
-    private static ArrayList<Trip> Search(Date startDate, Date endDate) throws ParseException {
-        FlightSearch fs = new FlightSearch();
-        HotelSearch hs = new HotelSearch();
-        TourSearch ts = new TourSearch();
-        CreateTrips Create = new CreateTrips(fs.getFlights(), hs.getHotels(), ts.getTours());
+    public ArrayList<Trip> findTrips() throws ParseException {
+        FlightSearch fsOut = new FlightSearch(startDate, departureLocation, location);
+        FlightSearch fsHome = new FlightSearch(endDate, location, departureLocation);
+        HotelSearch hs = new HotelSearch(startDate, endDate, location);
+        TourSearch ts = new TourSearch(startDate, endDate, location);
+        CreateTrips Create = new CreateTrips(fsOut.getFlights(), fsHome.getFlights(), hs.getHotels(), ts.getTours());
         
         ArrayList<Trip> trips = Create.generateTrips();
         
@@ -59,6 +66,10 @@ public class Search {
     
     public String getLocation() {
         return location;
+    }
+    
+    public void setDepartureLocation(String departureLocation) {
+        this.departureLocation = departureLocation;
     }
     
     public void setStartDate(Date startDate) {

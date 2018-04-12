@@ -9,23 +9,28 @@ import search.Tour;
 public class Trip {
 
     private Date startDate, endDate;
-    private Flight flight;
+    private Flight outFlight;
+    private Flight homeFlight;
     private Hotel hotel;
     private Tour tour;
     private double adultPrice, childPrice, rating; 
     
-    public Trip (Flight flight, Hotel hotel, Tour tour) {
+    public Trip (Flight outFlight, Flight homeFlight , Hotel hotel, Tour tour) {
         
-        this.flight = flight; 
+        this.outFlight = outFlight;
+        this.homeFlight = homeFlight; 
         this.hotel = hotel; 
         this.tour = tour; 
-        this.startDate = Collections.min(Arrays.asList(flight.getSD(), hotel.getSD(), tour.getSD()));
-        this.endDate = Collections.max(Arrays.asList(flight.getED(), hotel.getED(), tour.getED()));
+        this.startDate = Collections.min(Arrays.asList(outFlight.getSD(), hotel.getSD(), tour.getSD()));
+        this.endDate = Collections.max(Arrays.asList(homeFlight.getED(), hotel.getED(), tour.getED()));
         
-        this.rating = (flight.getRating() + hotel.getRating() + tour.getRating()) / 3;
+        this.rating = ( outFlight.getRating() + homeFlight.getRating() 
+                + hotel.getRating() + tour.getRating()) / 4;
         
-        this.adultPrice = flight.getAdultPrice() + hotel.getAdultPrice() + tour.getAdultPrice();
-        this.childPrice = flight.getChildPrice() + hotel.getChildPrice() + tour.getChildPrice();
+        this.adultPrice = outFlight.getAdultPrice() + homeFlight.getAdultPrice()
+                + hotel.getAdultPrice() + tour.getAdultPrice();
+        this.childPrice = outFlight.getChildPrice() + homeFlight.getChildPrice()
+                + hotel.getChildPrice() + tour.getChildPrice();
     }
     
     public double getAdultPrice() {
@@ -41,11 +46,12 @@ public class Trip {
     }
     
     public String toString() {
-        return ( "Flug með: " + flight.getAirline() + " til " + flight.getLocation() 
-                + ", Gisting: " + hotel.getName() + ", Daytour : " + tour.getName() +
-                " --- startDate: " + startDate + ", endDate: " + endDate 
-                + ", adultPrice: " + adultPrice + ", childPrice: " 
-                + childPrice +  ", rating: " + rating);
+        return ( "Flug með: " + outFlight.getAirline() + " til " + outFlight.getLocation() 
+                + ", Gisting: " + hotel.getName() + ", Daytour : " + tour.getName() 
+                + "Flug tilbaka með: " + homeFlight.getAirline() + " til " 
+                + homeFlight.getLocation() + " --- startDate: " + startDate 
+                + ", endDate: " + endDate + ", adultPrice: " + adultPrice 
+                + ", childPrice: " + childPrice +  ", rating: " + rating);
     }
     
 }

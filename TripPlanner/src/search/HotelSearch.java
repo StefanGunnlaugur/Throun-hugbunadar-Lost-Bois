@@ -9,9 +9,18 @@ public class HotelSearch {
     // Talar við db hjá hinum hópunum 
     private Hotel[] hotels; 
     private Date startDate, enddate;
+    private String location;
 
     
-    public HotelSearch() throws ParseException {
+    public HotelSearch(Date startDate, Date endDate, String location) throws ParseException {
+        
+        this.startDate = startDate;
+        this.enddate = endDate;
+        this.location = location;
+        
+        
+        // --------- FAKE DATA FOR TESTING --------
+        
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
         Date d1 = sdf.parse("02-05-2018 12:00:00");
         Date d2 = sdf.parse("04-05-2018 12:00:00");

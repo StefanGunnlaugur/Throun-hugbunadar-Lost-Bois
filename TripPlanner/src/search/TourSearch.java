@@ -8,8 +8,16 @@ public class TourSearch {
     // Talar við db hjá hinum hópunum 
     private Tour[] tours; 
     private Date startDate, enddate;
+    private String location;
     
-    public TourSearch() throws ParseException {
+    public TourSearch(Date startDate, Date endDate, String location) throws ParseException {
+        this.startDate = startDate;
+        this.enddate = endDate;
+        this.location = location;
+        
+        
+        // --------- FAKE DATA FOR TESTING --------
+        
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
         Date d1 = sdf.parse("05-05-2018 12:00:00");
         Date d2 = sdf.parse("04-05-2018 19:30:00");

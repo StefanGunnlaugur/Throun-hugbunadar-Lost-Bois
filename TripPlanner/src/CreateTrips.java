@@ -5,24 +5,19 @@ import java.text.SimpleDateFormat;
 
 
 public class CreateTrips {
-    private final Flight[] flights;
+    private final Flight[] outFlights;
+    private final Flight[] homeFlights;
     private final Hotel[] hotels;
     private final Tour[] tours;
-    private Date startDate, enddate;
     private ArrayList<Trip> trips;
-    private double max; 
 
-    public CreateTrips( Flight[] flights, Hotel[] hotels, Tour[] tours) {
+    public CreateTrips( Flight[] outFlights, Flight[] homeFlights, Hotel[] hotels, Tour[] tours) {
         this.trips = new ArrayList<>();
-        this.flights = flights;
+        this.outFlights = outFlights;
+        this.homeFlights = homeFlights;
         this.hotels = hotels;
         this.tours = tours;
     }
-    
-    public void setMaxDist(double max) {
-        this.max = max;
-    }
-    
     
     // Athugar fjarlægð milli staða skilar mælingum milli punktanna 3. 
     // hámarks vegalengd  milli staða = max 
@@ -87,29 +82,47 @@ public class CreateTrips {
         return false;
     }
     
+    // Ath hvort flugin séu pör 
+    private boolean CheckFlights(Flight outFlight, Flight homeFlight) {
+        return (outFlight.getLocation() == homeFlight.getDepartureLocation() 
+            && outFlight.getDepartureLocation() == homeFlight.getLocation()
+            && outFlight.getLocation() != homeFlight.getLocation()
+            && outFlight.getDepartureLocation() != homeFlight.getDepartureLocation()
+                );
+    }
+       
+    
     public ArrayList<Trip> generateTrips() {
-        for(Flight flight:flights ) {
+        for(Flight outFlight:outFlights ) {
             for (Hotel hotel:hotels) {
                 for (Tour tour:tours) {
-                    
-                    double fLat = flight.getLat(), fLon= flight.getLon();
-                    double hLat = hotel.getLat(), hLon= hotel.getLon();
-                    double tLat = tour.getLat(), tLon= tour.getLon();
-                    double[] dist = CheckDistance(max, fLat, fLon, hLat, hLon, tLat, tLon);
-                    
-                    if (dist.length > 0) {
-                        Date fSD = flight.getSD(), fED= flight.getED();                        
-                        Date hSD = hotel.getSD(), hED= hotel.getED();
-                        Date tSD = tour.getSD(), tED= tour.getED();
-                        long fDuration = flight.getDuration(); 
-                        if (CheckDate( fSD, fED, hSD, hED, tSD, tED, dist, fDuration)) {
-                            Trip trip = new Trip(flight, hotel, tour);
-                            trips.add(trip);
-                        }                        
+                    for (Flight homeFlight:homeFlights) {
+                        
+                        if ( CheckFlights(outFlight, homeFlight)) {
+                            
+                            double fLat = outFlight.getLat(), fLon= outFlight.getLon();
+                            double hLat = hotel.getLat(), hLon= hotel.getLon();
+                            double tLat = tour.getLat(), tLon= tour.getLon();
+                            double[] dist = CheckDistance(100, fLat, fLon, hLat, hLon, tLat, tLon);
+
+                            if (dist.length > 0) {
+                                Date fSD = outFlight.getSD(), fED= homeFlight.getED();                        
+                                Date hSD = hotel.getSD(), hED= hotel.getED();
+                                Date tSD = tour.getSD(), tED= tour.getED();
+                                long fDuration = outFlight.getDuration(); 
+                                if (CheckDate( fSD, fED, hSD, hED, tSD, tED, dist, fDuration)) {
+                                    Trip trip = new Trip(outFlight, homeFlight, hotel, tour);
+                                    trips.add(trip);
+                                }                        
+                            }
+                        }
+                        
                     }
                 }
             }
         }
      return trips;   
     }
+
+    
 }
