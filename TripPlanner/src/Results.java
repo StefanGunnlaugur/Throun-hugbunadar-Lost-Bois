@@ -11,8 +11,7 @@ class Results {
         this.maxPrice = Double.POSITIVE_INFINITY;
         this.minRating = 0;
         this.adults = 1;
-        this.childs = 0; 
-        
+        this.childs = 0;
     }
     
     public void setMaxPrice(double price) {
@@ -31,18 +30,15 @@ class Results {
         this.childs = childs; 
     }
     
-    public ArrayList<Trip> get( ArrayList<Trip> trips) {
+    public ArrayList<Trip> filter( ArrayList<Trip> trips) {
         resultTrips = new ArrayList<>();
         for (Trip currTrip:trips) {
             double price = adults*currTrip.getAdultPrice() + childs*currTrip.getChildPrice();
-            System.out.println("price : " + price + " er " + (maxPrice >= price) ); 
 
             if (minRating <= currTrip.getRating() && maxPrice >= price) {
                 resultTrips.add(currTrip);
             }
         } 
         return resultTrips;
-    }
-    
-    
+    }    
 }

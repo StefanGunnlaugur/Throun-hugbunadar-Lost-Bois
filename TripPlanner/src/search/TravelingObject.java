@@ -64,5 +64,9 @@ public class TravelingObject {
     public double getRating() {
         return this.rating;
     }
+    
+    public String getLocation() {
+        return this.location;
+    }
 
 }

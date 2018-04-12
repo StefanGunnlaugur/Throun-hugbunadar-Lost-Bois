@@ -41,7 +41,9 @@ public class Trip {
     }
     
     public String toString() {
-        return ("startDate: " + startDate + ", endDate: " + endDate 
+        return ( "Flug með: " + flight.getAirline() + " til " + flight.getLocation() 
+                + ", Gisting: " + hotel.getName() + ", Daytour : " + tour.getName() +
+                " --- startDate: " + startDate + ", endDate: " + endDate 
                 + ", adultPrice: " + adultPrice + ", childPrice: " 
                 + childPrice +  ", rating: " + rating);
     }

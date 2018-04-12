@@ -3,16 +3,19 @@ package search;
 import java.util.Date;
 
 public class Flight extends TravelingObject {
-    private String seatnr, departure;
+    private String seatnr, departureLocation, airline;
     private int duration; 
 
     public Flight(String ID, Date SD, Date ED, String location, 
             double audltPrice, double childPrice, double rating,
-            String departure, String seatnr, int duration) {
+            String departureLocation, String  airline, String seatnr, int duration) {
+        
         super(ID, SD, ED, location, audltPrice, childPrice, rating);
+        
         this.seatnr = seatnr; 
-        this.departure = departure; 
+        this.departureLocation = departureLocation; 
         this.duration = duration; 
+        this.airline = airline;
     }
         
     // Skilar tíma flugs í ms
@@ -23,6 +26,10 @@ public class Flight extends TravelingObject {
     // Skilar tíma flugs í ms
     public String getSeatnr() {
         return seatnr; 
+    }
+    
+    public String getAirline() {
+        return airline;
     }
 
 }
