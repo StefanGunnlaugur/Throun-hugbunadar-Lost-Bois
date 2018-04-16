@@ -1,10 +1,12 @@
 package search;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Hotel extends TravelingObject {
     private int roomnr;
-    private String name;
+    private String name, shortDate;
 
     public Hotel(String ID, Date SD, Date ED, String location, 
             double audltPrice, double childPrice, double rating, String name, int roomnr) {
@@ -12,7 +14,10 @@ public class Hotel extends TravelingObject {
         super(ID, SD, ED, location, audltPrice, childPrice, rating);
         
         this.name = name;
-        this.roomnr = roomnr; 
+        this.roomnr = roomnr;
+        
+        Format formatter = new SimpleDateFormat("dd-MM");
+        this.shortDate = " Frá: " + formatter.format(SD) +  " til: " + formatter.format(SD) ;
     }
 
     public int getRoomnr() {
@@ -21,6 +26,10 @@ public class Hotel extends TravelingObject {
     
     public String getName() {
         return name;
+    }
+     
+    public String getShortDate() {
+        return shortDate;
     }
 
     

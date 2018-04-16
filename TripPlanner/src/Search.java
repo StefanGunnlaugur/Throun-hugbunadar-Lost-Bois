@@ -1,13 +1,29 @@
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.*;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import search.*;
 
-public class Search {
+public class Search extends Application{
 
     private String location, departureLocation;
     private Date startDate, endDate; 
+    
+    @Override
+    public void start(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("SearchDisplay.fxml"));
+        
+        Scene scene = new Scene(root);
+        
+        stage.setScene(scene);
+        stage.show();
+    }
     
     public Search() {
         // Setjum dagsetningu núna sem SD og eftir viku sem ED -- sem default
@@ -29,7 +45,8 @@ public class Search {
         search.setStartDate(date1);
         search.setEndDate(date2);
         search.setLocation("Reykjavík");
-        
+        launch(args); 
+        /*
         // Leitar eftir og býr til ferðrir sem meika sense
         // notum dags. til að sækja í gg. hjá hinum
         ArrayList<Trip> trips = search.findTrips();
@@ -44,20 +61,9 @@ public class Search {
         res.setMaxPrice(250000);
         System.out.println(res.filter(trips));
         res.setMinRating(3);
-        System.out.println(res.filter(trips));
-    }
-    
-    public ArrayList<Trip> findTrips() throws ParseException {
-        FlightSearch fsOut = new FlightSearch(startDate, departureLocation, location);
-        FlightSearch fsHome = new FlightSearch(endDate, location, departureLocation);
-        HotelSearch hs = new HotelSearch(startDate, endDate, location);
-        TourSearch ts = new TourSearch(startDate, endDate, location);
-        CreateTrips Create = new CreateTrips(fsOut.getFlights(), fsHome.getFlights(), hs.getHotels(), ts.getTours());
+        System.out.println(res.filter(trips));        
         
-        ArrayList<Trip> trips = Create.generateTrips();
-        
-        System.out.println(trips); 
-        return trips;
+             */   
     }
     
     public void setLocation(String location) {
@@ -88,6 +94,8 @@ public class Search {
         return endDate;
     } 
     
+    
+    
     /*
     public String FlightSearchMock() {
         // Væri Flight klasi sem sá hópur gerir
@@ -107,5 +115,6 @@ public class Search {
     public createTrips(Flight[] flights, Hotel[] hotels, Tour[] tours) {
         CreateTrips(flights)
     }*/
-   
+
+       
 }

@@ -5,13 +5,13 @@ import java.text.SimpleDateFormat;
 
 
 public class CreateTrips {
-    private final Flight[] outFlights;
-    private final Flight[] homeFlights;
-    private final Hotel[] hotels;
-    private final Tour[] tours;
+    private final ArrayList<Flight> outFlights;
+    private final ArrayList<Flight> homeFlights;
+    private final ArrayList<Hotel> hotels;
+    private final ArrayList<Tour> tours;
     private ArrayList<Trip> trips;
 
-    public CreateTrips( Flight[] outFlights, Flight[] homeFlights, Hotel[] hotels, Tour[] tours) {
+    public CreateTrips( ArrayList<Flight> outFlights, ArrayList<Flight> homeFlights, ArrayList<Hotel> hotels, ArrayList<Tour> tours) {
         this.trips = new ArrayList<>();
         this.outFlights = outFlights;
         this.homeFlights = homeFlights;
@@ -62,7 +62,6 @@ public class CreateTrips {
                 return true;
             }
         }
-        
         return fmt.format(date1).equals(fmt.format(date2));
     }
     
@@ -106,9 +105,9 @@ public class CreateTrips {
                             double[] dist = CheckDistance(100, fLat, fLon, hLat, hLon, tLat, tLon);
 
                             if (dist.length > 0) {
-                                Date fSD = outFlight.getSD(), fED= homeFlight.getED();                        
-                                Date hSD = hotel.getSD(), hED= hotel.getED();
-                                Date tSD = tour.getSD(), tED= tour.getED();
+                                Date fSD = outFlight.getStartDate(), fED= homeFlight.getEndDate();                        
+                                Date hSD = hotel.getStartDate(), hED= hotel.getEndDate();
+                                Date tSD = tour.getStartDate(), tED= tour.getEndDate();
                                 long fDuration = outFlight.getDuration(); 
                                 if (CheckDate( fSD, fED, hSD, hED, tSD, tED, dist, fDuration)) {
                                     Trip trip = new Trip(outFlight, homeFlight, hotel, tour);

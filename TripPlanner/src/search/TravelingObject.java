@@ -25,6 +25,8 @@ public class TravelingObject {
             break;
             case "Akureyri": lat = 65.654509;
             break;
+            case "Keflavík": lat = 64.001114;
+            break;
         }
         return lat;
     }
@@ -37,15 +39,17 @@ public class TravelingObject {
             break;
             case "Akureyri": lon = -18.076340;
             break;
+            case "Keflavík": lon = -22.551945;
+            break;
         }
         return lon;
     }
     
-    public Date getSD() {
+    public Date getStartDate() {
         return this.startDate;
     }
     
-    public Date getED() {
+    public Date getEndDate() {
         return this.endDate;
     }
     

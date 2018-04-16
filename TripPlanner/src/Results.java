@@ -1,5 +1,7 @@
 
 import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 class Results {
     
@@ -30,7 +32,7 @@ class Results {
         this.childs = childs; 
     }
     
-    public ArrayList<Trip> filter( ArrayList<Trip> trips) {
+    public ObservableList<Trip> filter(ObservableList<Trip> trips) {
         resultTrips = new ArrayList<>();
         for (Trip currTrip:trips) {
             double price = adults*currTrip.getAdultPrice() + childs*currTrip.getChildPrice();
@@ -39,6 +41,6 @@ class Results {
                 resultTrips.add(currTrip);
             }
         } 
-        return resultTrips;
+        return FXCollections.observableArrayList(resultTrips);
     }    
 }

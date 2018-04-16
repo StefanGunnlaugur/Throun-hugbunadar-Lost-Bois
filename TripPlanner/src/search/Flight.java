@@ -1,9 +1,11 @@
 package search;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Flight extends TravelingObject {
-    private String seatnr, departureLocation, airline;
+    private String seatnr, departureLocation, airline, shortDate;
     private int duration; 
 
     public Flight(String ID, Date date, String location, 
@@ -16,6 +18,9 @@ public class Flight extends TravelingObject {
         this.departureLocation = departureLocation; 
         this.duration = duration; 
         this.airline = airline;
+        
+        Format formatter = new SimpleDateFormat("dd-MMM HH:mm");
+        this.shortDate = formatter.format(date);
     }
         
     // Skilar tíma flugs í ms
@@ -34,6 +39,10 @@ public class Flight extends TravelingObject {
     
     public String getDepartureLocation() {
         return departureLocation;
+    }
+    
+    public String getShortDate() {
+        return shortDate;
     }
 
 }
