@@ -9,11 +9,11 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import search.Flight;
+import search.Hotel;
+import search.Tour;
 
 /**
  * FXML Controller class
@@ -51,12 +51,32 @@ public class BookingDisplayController implements Initializable {
     }
     
     public void  showBooking(){
-        DialogPane p = new DialogPane();
-        nDialog.setVisible(true);
-        p.setContent(nDialog);
-        Dialog<ButtonType> d = new Dialog();
-        d.setDialogPane(p);
-        d.showAndWait();
+        Flight oFl = trip.getOutFlight();
+        Flight hFl = trip.getHomeFlight();
+        Hotel h = trip.getHotel();
+        Tour t = trip.getTour();
+        flightOut.setText("Frá : " + oFl.getDepartureLocation() 
+                + ", Til : " + oFl.getLocation() 
+                + ", Brottför : " + oFl.getShortDate() 
+                + ", Flugfélag : " + oFl.getAirline() 
+                + ", Flugnúmer : " + oFl.getFlightNumber()
+                + ", Heildar verð : " + (oFl.getAdultPrice()*adults + oFl.getChildPrice()*childs) + "kr");
+        flightHome.setText("Frá : " + hFl.getDepartureLocation() 
+                + ", Til : " + hFl.getLocation() 
+                + ", Brottför : " + hFl.getShortDate() 
+                + ", Flugfélag : " + hFl.getAirline() 
+                + ", Flugnúmer : " + hFl.getFlightNumber()
+                + ", Heildar verð : " + (hFl.getAdultPrice()*adults + hFl.getChildPrice()*childs) + "kr");
+        hotel.setText("Hótel : " + h.getName() 
+                + ", Staðsetning : " + h.getLocation()
+                + ", Bókunartími : " + h.getShortDate()
+                + ", Heildar verð : " + (h.getAdultPrice()*adults + h.getChildPrice()*childs) + "kr");
+        tour.setText("Ferð : " + t.getName()
+                + ", Tímasetning : " + t.getShortDate()
+                + ", Staðsetning : " + t.getLocation()
+                + ", Heildar verð : " + (t.getAdultPrice()*adults + t.getChildPrice()*childs) + "kr");
+        people.setText("Fullorðnir : " + adults + ", Börn : " + childs);
+        price.setText((trip.getAdultPrice()*adults + trip.getChildPrice()*childs) + "kr");
     }
 
     /**
@@ -64,7 +84,7 @@ public class BookingDisplayController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        showBooking();
     }    
     
 }

@@ -277,13 +277,17 @@ public class SearchDisplayController implements Initializable {
     
     @FXML
     public void bookTrip(MouseEvent event) {
-        /*BookingDisplayController bookingController = new BookingDisplayController(selectedTrip, selectedAdults, selectedChilds );
+        try {
+        BookingDisplayController bookingController = new BookingDisplayController(selectedTrip, selectedAdults, selectedChilds );
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BookingDisplay.fxml"));
         fxmlLoader.setController(bookingController);
-        Parent bookingRoot = (Parent) fxmlLoader.load();
+        Parent root1 = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
-        stage.setScene(new Scene(bookingRoot));
-        stage.show();*/
+        stage.setScene(new Scene(root1));
+        stage.show();
+        } catch (Exception e) {
+            System.out.println("error opening booking  -- " + e);
+        }
         //this.bookingDisplayController = new BookingDisplayController(selectedTrip, selectedAdults, selectedChilds );
         //bookingController.showBooking();        
     }

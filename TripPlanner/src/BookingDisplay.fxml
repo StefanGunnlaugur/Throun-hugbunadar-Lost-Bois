@@ -5,43 +5,42 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" fx:id="nDialog" visible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BookingDisplayController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="415.0" prefWidth="689.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="backButton" layoutX="322.0" layoutY="343.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="82.0" text="Til Baka" />
-      <Button fx:id="continueButton" layoutX="200.0" layoutY="343.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="82.0" text="Áfram" />
-      <Label fx:id="flightOut" alignment="BASELINE_CENTER" layoutX="12.0" layoutY="40.0" prefHeight="24.0" prefWidth="576.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
-      <Label alignment="BASELINE_CENTER" layoutX="239.0" layoutY="20.0" prefHeight="20.0" prefWidth="124.0" text="Flug á Áfangastað">
+      <Button fx:id="backButton" layoutX="366.0" layoutY="352.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="82.0" text="Til Baka" />
+      <Button fx:id="continueButton" layoutX="244.0" layoutY="352.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="82.0" text="Áfram" />
+      <Label fx:id="flightOut" alignment="BASELINE_CENTER" layoutX="14.0" layoutY="48.0" prefHeight="24.0" prefWidth="663.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
+      <Label alignment="BASELINE_CENTER" layoutX="283.0" layoutY="29.0" prefHeight="20.0" prefWidth="124.0" text="Flug á Áfangastað">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label alignment="BASELINE_CENTER" layoutX="259.0" layoutY="75.0" prefHeight="20.0" prefWidth="82.0" text="Flug til baka">
+      <Label alignment="BASELINE_CENTER" layoutX="303.0" layoutY="84.0" prefHeight="20.0" prefWidth="82.0" text="Flug til baka">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="flightHome" alignment="BASELINE_CENTER" layoutX="12.0" layoutY="95.0" prefHeight="24.0" prefWidth="576.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
-      <Label alignment="BASELINE_CENTER" layoutX="256.0" layoutY="128.0" prefHeight="20.0" prefWidth="91.0" text="Hótel gisting">
+      <Label fx:id="flightHome" alignment="BASELINE_CENTER" layoutX="14.0" layoutY="103.0" prefHeight="24.0" prefWidth="663.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
+      <Label alignment="BASELINE_CENTER" layoutX="300.0" layoutY="137.0" prefHeight="20.0" prefWidth="91.0" text="Hótel gisting">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="hotel" alignment="BASELINE_CENTER" layoutX="12.0" layoutY="148.0" prefHeight="24.0" prefWidth="576.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
-      <Label alignment="BASELINE_CENTER" layoutX="266.0" layoutY="180.0" prefHeight="20.0" prefWidth="69.0" text="Dagsferð">
+      <Label fx:id="hotel" alignment="BASELINE_CENTER" layoutX="14.0" layoutY="156.0" prefHeight="24.0" prefWidth="663.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
+      <Label alignment="BASELINE_CENTER" layoutX="310.0" layoutY="189.0" prefHeight="20.0" prefWidth="69.0" text="Dagsferð">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="tour" alignment="BASELINE_CENTER" layoutX="13.0" layoutY="200.0" prefHeight="24.0" prefWidth="576.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
-      <Label alignment="BASELINE_CENTER" layoutX="239.0" layoutY="230.0" prefHeight="20.0" prefWidth="124.0" text="Fjöldi ferðafélaga">
+      <Label fx:id="tour" alignment="BASELINE_CENTER" layoutX="15.0" layoutY="208.0" prefHeight="24.0" prefWidth="663.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
+      <Label alignment="BASELINE_CENTER" layoutX="283.0" layoutY="239.0" prefHeight="20.0" prefWidth="124.0" text="Fjöldi ferðafélaga">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="people" alignment="BASELINE_CENTER" layoutX="12.0" layoutY="250.0" prefHeight="24.0" prefWidth="576.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
-      <Label fx:id="price" alignment="BASELINE_CENTER" layoutX="14.0" layoutY="299.0" prefHeight="24.0" prefWidth="576.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
-      <Label alignment="BASELINE_CENTER" layoutX="241.0" layoutY="279.0" prefHeight="20.0" prefWidth="124.0" text="Heildar verð">
+      <Label fx:id="people" alignment="BASELINE_CENTER" layoutX="14.0" layoutY="258.0" prefHeight="24.0" prefWidth="663.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
+      <Label fx:id="price" alignment="BASELINE_CENTER" layoutX="16.0" layoutY="307.0" prefHeight="24.0" prefWidth="663.0" text="Frá:     Til:  Dagsetning: " textAlignment="CENTER" />
+      <Label alignment="BASELINE_CENTER" layoutX="285.0" layoutY="288.0" prefHeight="20.0" prefWidth="124.0" text="Heildar verð">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

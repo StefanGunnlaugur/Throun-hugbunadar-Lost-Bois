@@ -5,16 +5,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Flight extends TravelingObject {
-    private String seatnr, departureLocation, airline, shortDate;
+    private String flightNr, departureLocation, airline, shortDate;
     private int duration; 
 
     public Flight(String ID, Date date, String location, 
             double audltPrice, double childPrice, double rating,
-            String departureLocation, String  airline, String seatnr, int duration) {
+            String departureLocation, String  airline, String flightNr, int duration) {
         
         super(ID, date, date, location, audltPrice, childPrice, rating);
         
-        this.seatnr = seatnr; 
+        this.flightNr = flightNr; 
         this.departureLocation = departureLocation; 
         this.duration = duration; 
         this.airline = airline;
@@ -28,11 +28,6 @@ public class Flight extends TravelingObject {
         return duration*(long)60000; 
     }
     
-    // Skilar tíma flugs í ms
-    public String getSeatnr() {
-        return seatnr; 
-    }
-    
     public String getAirline() {
         return airline;
     }
@@ -43,6 +38,10 @@ public class Flight extends TravelingObject {
     
     public String getShortDate() {
         return shortDate;
+    }
+
+    public String getFlightNumber() {
+        return flightNr;     
     }
 
 }

@@ -97,6 +97,22 @@ public class Trip {
         return rating;
     }
     
+    public Flight getOutFlight() {
+        return outFlight;
+    }
+    
+    public Flight getHomeFlight() {
+        return homeFlight;
+    }
+    
+    public Hotel getHotel() {
+        return hotel;
+    }
+    
+    public Tour getTour() {
+        return tour;
+    }
+    
     public String toString() {
         return ( "Flug með: " + outFlight.getAirline() + " til " + outFlight.getLocation() 
                 + ", Gisting: " + hotel.getName() + ", Daytour : " + tour.getName() 
