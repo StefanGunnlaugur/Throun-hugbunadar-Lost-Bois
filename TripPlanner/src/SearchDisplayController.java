@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -13,7 +8,10 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -24,6 +22,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import search.Flight;
 import search.FlightSearch;
@@ -49,6 +48,7 @@ public class SearchDisplayController implements Initializable {
     private Flight selectedHomeFlight = null;
     private Hotel selectedHotel = null;
     private Tour selectedTour = null;
+    private int selectedAdults = 1, selectedChilds = 0; 
     
    
     @FXML
@@ -67,6 +67,8 @@ public class SearchDisplayController implements Initializable {
     private Tab generatedTrips;
     @FXML
     private Tab createTrip;
+   
+    // private BookingDisplayController bookingController;
     
     
     @FXML
@@ -171,8 +173,6 @@ public class SearchDisplayController implements Initializable {
     private TextField childs;
     @FXML
     private Label totalPrice;
-    @FXML
-    private TableColumn<?, ?> tripsChildPricecolumn1;
     
      /**
      * Initializes the controller class.
@@ -229,39 +229,63 @@ public class SearchDisplayController implements Initializable {
     @FXML
     public void selectedTrip(MouseEvent event){
         this.selectedTrip = (Trip) trips.getSelectionModel().getSelectedItem();
-        this.selectedOutFlight = null;
-        this.selectedHomeFlight = null;
-        this.selectedHotel = null;
-        this.selectedTour = null;
         updatePrice();
+        book.setDisable(false);
     }
     
     @FXML
     public void selectedOutFlight(MouseEvent event){
-        this.selectedOutFlight = (Flight) flightsOut.getSelectionModel().getSelectedItem();
         this.selectedTrip = null;
+        this.selectedOutFlight = (Flight) flightsOut.getSelectionModel().getSelectedItem();
         updatePrice();
+        tryMakingTrip();
     }
     
     @FXML
     public void selectedHomeFlight(MouseEvent event){
-        this.selectedHomeFlight = (Flight) flightsHome.getSelectionModel().getSelectedItem();
         this.selectedTrip = null;
+        this.selectedHomeFlight = (Flight) flightsHome.getSelectionModel().getSelectedItem();
         updatePrice();
+        tryMakingTrip();
     }
     
     @FXML
     public void selectedHotel(MouseEvent event){
-        this.selectedHotel = (Hotel) hotels.getSelectionModel().getSelectedItem();
         this.selectedTrip = null;
+        this.selectedHotel = (Hotel) hotels.getSelectionModel().getSelectedItem();
         updatePrice();
+        tryMakingTrip();
     }
     
     @FXML
     public void selectedTour(MouseEvent event){
-        this.selectedTour = (Tour) tours.getSelectionModel().getSelectedItem();
         this.selectedTrip = null;
+        this.selectedTour = (Tour) tours.getSelectionModel().getSelectedItem();
         updatePrice();
+        tryMakingTrip();
+    }
+    
+    public void tryMakingTrip(){
+        if(selectedOutFlight!=null && selectedHomeFlight!=null &&
+                selectedHotel!=null && selectedTour!=null) {
+            this.selectedTrip = new Trip(selectedOutFlight, selectedHomeFlight, selectedHotel, selectedTour);
+            book.setDisable(false);
+        }else {
+            book.setDisable(true);            
+        }     
+    }
+    
+    @FXML
+    public void bookTrip(MouseEvent event) {
+        /*BookingDisplayController bookingController = new BookingDisplayController(selectedTrip, selectedAdults, selectedChilds );
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BookingDisplay.fxml"));
+        fxmlLoader.setController(bookingController);
+        Parent bookingRoot = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(bookingRoot));
+        stage.show();*/
+        //this.bookingDisplayController = new BookingDisplayController(selectedTrip, selectedAdults, selectedChilds );
+        //bookingController.showBooking();        
     }
     
     
@@ -354,32 +378,31 @@ public class SearchDisplayController implements Initializable {
 
     private void updatePrice() {
         double totPrice = 0;
-        int setAdults = 1, setChilds=0;
         if(!adults.getText().trim().isEmpty()) {
-          setAdults = Integer.parseInt(adults.getText().trim());
+          this.selectedAdults = Integer.parseInt(adults.getText().trim());
         } 
         if(!childs.getText().trim().isEmpty()) {
-          setChilds = Integer.parseInt(childs.getText().trim());
+          this.selectedChilds = Integer.parseInt(childs.getText().trim());
         } 
         if(this.selectedTrip!=null){
-            totPrice = selectedTrip.getAdultPrice()*setAdults +
-                    selectedTrip.getChildPrice()*setChilds;
+            totPrice = selectedTrip.getAdultPrice()*selectedAdults +
+                    selectedTrip.getChildPrice()*selectedChilds;
         }else {
             if(this.selectedOutFlight!=null){
-                totPrice = totPrice + selectedOutFlight.getAdultPrice()*setAdults +
-                    selectedOutFlight.getChildPrice()*setChilds;
+                totPrice = totPrice + selectedOutFlight.getAdultPrice()*selectedAdults +
+                    selectedOutFlight.getChildPrice()*selectedChilds;
             }
             if(this.selectedHomeFlight!=null){
-                totPrice = totPrice + selectedHomeFlight.getAdultPrice()*setAdults +
-                    selectedHomeFlight.getChildPrice()*setChilds;
+                totPrice = totPrice + selectedHomeFlight.getAdultPrice()*selectedAdults +
+                    selectedHomeFlight.getChildPrice()*selectedChilds;
             }
             if(this.selectedHotel!=null){
-                totPrice = totPrice + selectedHotel.getAdultPrice()*setAdults +
-                    selectedHotel.getChildPrice()*setChilds;
+                totPrice = totPrice + selectedHotel.getAdultPrice()*selectedAdults +
+                    selectedHotel.getChildPrice()*selectedChilds;
             }
             if(this.selectedTour!=null){
-                totPrice = totPrice + selectedTour.getAdultPrice()*setAdults +
-                    selectedTour.getChildPrice()*setChilds;
+                totPrice = totPrice + selectedTour.getAdultPrice()*selectedAdults +
+                    selectedTour.getChildPrice()*selectedChilds;
             }
         }
         totalPrice.setText("Heildarverð : " + totPrice + "kr");
@@ -431,6 +454,5 @@ public class SearchDisplayController implements Initializable {
         endDate.setConverter(converter);
         endDate.setPromptText(pattern.toLowerCase());
         endDate.requestFocus();
-    }
-        
+    } 
 }

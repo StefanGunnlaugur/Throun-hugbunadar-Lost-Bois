@@ -16,7 +16,7 @@ public class Search extends Application{
     private Date startDate, endDate; 
     
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception {        
         Parent root = FXMLLoader.load(getClass().getResource("SearchDisplay.fxml"));
         
         Scene scene = new Scene(root);
