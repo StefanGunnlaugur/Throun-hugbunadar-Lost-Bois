@@ -9,7 +9,7 @@ public class Tour extends TravelingObject {
    private String name, shortDate;
 
     public Tour(String ID, Date date, String location, 
-            double audltPrice, double childPrice, double rating,
+            int audltPrice, int childPrice, double rating,
             String name, int duration) {
         
         super(ID, date, date, location, audltPrice, childPrice, rating);

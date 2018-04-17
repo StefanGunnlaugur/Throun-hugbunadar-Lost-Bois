@@ -6,12 +6,18 @@
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import search.Flight;
+import javafx.stage.Stage;
+import search.TripFlight;
 import search.Hotel;
 import search.Tour;
 
@@ -40,8 +46,6 @@ public class BookingDisplayController implements Initializable {
     private Label people;
     @FXML
     private Label price;
-    @FXML
-    private AnchorPane nDialog;
     
     
     public BookingDisplayController (Trip trip, int adults, int childs) {
@@ -51,8 +55,8 @@ public class BookingDisplayController implements Initializable {
     }
     
     public void  showBooking(){
-        Flight oFl = trip.getOutFlight();
-        Flight hFl = trip.getHomeFlight();
+        TripFlight oFl = trip.getOutFlight();
+        TripFlight hFl = trip.getHomeFlight();
         Hotel h = trip.getHotel();
         Tour t = trip.getTour();
         flightOut.setText("Frá : " + oFl.getDepartureLocation() 
@@ -87,4 +91,26 @@ public class BookingDisplayController implements Initializable {
         showBooking();
     }    
     
+    @FXML
+    public void tripOK(ActionEvent event) {
+        try {
+        UserDisplayController userController = new UserDisplayController(trip, adults, childs );
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("UserDisplay.fxml"));
+        fxmlLoader.setController(userController);
+        Parent root2 = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root2));
+        stage.show();
+        } catch (Exception e) {
+            System.out.println("error opening booking");
+        }
+        Stage stage = (Stage) continueButton.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    public void goBack(ActionEvent event) {
+        Stage stage = (Stage) backButton.getScene().getWindow();
+        stage.close();
+    }
 }

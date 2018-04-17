@@ -5,22 +5,23 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import static jdk.nashorn.internal.objects.NativeMath.round;
-import search.Flight;
+import search.TripFlight;
 import search.Hotel;
 import search.Tour;
 
 public class Trip {
 
     private Date startDate, endDate;
-    private Flight outFlight;
-    private Flight homeFlight;
+    private TripFlight outFlight;
+    private TripFlight homeFlight;
     private Hotel hotel;
     private Tour tour;
     private String hotelName, tourName, departure, destination, 
             shortStartDate, shortEndDate, tourDate;
-    private double adultPrice, childPrice, rating; 
+    private double rating; 
+    private int adultPrice, childPrice;
     
-    public Trip (Flight outFlight, Flight homeFlight , Hotel hotel, Tour tour) {
+    public Trip (TripFlight outFlight, TripFlight homeFlight , Hotel hotel, Tour tour) {
         
         this.outFlight = outFlight;
         this.homeFlight = homeFlight; 
@@ -85,11 +86,11 @@ public class Trip {
         return this.destination;
     }
     
-    public double getAdultPrice() {
+    public int getAdultPrice() {
         return this.adultPrice;
     }
     
-    public double getChildPrice() {
+    public int getChildPrice() {
         return this.childPrice;
     }
     
@@ -97,11 +98,11 @@ public class Trip {
         return rating;
     }
     
-    public Flight getOutFlight() {
+    public TripFlight getOutFlight() {
         return outFlight;
     }
     
-    public Flight getHomeFlight() {
+    public TripFlight getHomeFlight() {
         return homeFlight;
     }
     

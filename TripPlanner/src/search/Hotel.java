@@ -9,7 +9,7 @@ public class Hotel extends TravelingObject {
     private String name, shortDate;
 
     public Hotel(String ID, Date SD, Date ED, String location, 
-            double audltPrice, double childPrice, double rating, String name, int roomnr) {
+            int audltPrice, int childPrice, double rating, String name, int roomnr) {
         
         super(ID, SD, ED, location, audltPrice, childPrice, rating);
         
@@ -17,7 +17,7 @@ public class Hotel extends TravelingObject {
         this.roomnr = roomnr;
         
         Format formatter = new SimpleDateFormat("dd-MM");
-        this.shortDate = " Frá: " + formatter.format(SD) +  " til: " + formatter.format(SD) ;
+        this.shortDate = " Frá: " + formatter.format(SD) +  " til: " + formatter.format(ED) ;
     }
 
     public int getRoomnr() {

@@ -69,7 +69,7 @@ public class TourSearch {
             if (endDate!=null && !tour.getEndDate().before(endDate)){
                 add = false;
             }
-            if (location!=null && !location.isEmpty() && location!=tour.getLocation()){
+            if (location!=null && !location.isEmpty() && !location.equals(tour.getLocation())){
                 add = false;
             }
             if(add){

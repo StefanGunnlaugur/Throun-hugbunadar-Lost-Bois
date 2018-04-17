@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="659.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="cardholder" alignment="BASELINE_CENTER" layoutX="24.0" layoutY="96.0" prefHeight="25.0" prefWidth="263.0" />
+      <TextField fx:id="cardnumber" alignment="BASELINE_CENTER" layoutX="311.0" layoutY="96.0" prefHeight="25.0" prefWidth="263.0" />
+      <Label alignment="BASELINE_CENTER" layoutX="24.0" layoutY="71.0" prefHeight="17.0" prefWidth="263.0" text="Korthafi" />
+      <Label alignment="BASELINE_CENTER" layoutX="311.0" layoutY="71.0" prefHeight="17.0" prefWidth="263.0" text="Kortanúmer" />
+      <Label alignment="BASELINE_CENTER" layoutX="313.0" layoutY="418.0" prefHeight="17.0" prefWidth="263.0" text="Eftirnafn" />
+      <Label alignment="BASELINE_CENTER" layoutX="26.0" layoutY="418.0" prefHeight="17.0" prefWidth="263.0" text="Fornafn" />
+      <TextField fx:id="lastName" alignment="BASELINE_CENTER" layoutX="313.0" layoutY="443.0" prefHeight="25.0" prefWidth="263.0" />
+      <TextField fx:id="firstName" alignment="BASELINE_CENTER" layoutX="26.0" layoutY="443.0" prefHeight="25.0" prefWidth="263.0" />
+      <ProgressBar fx:id="progressBar" layoutX="24.0" layoutY="385.0" prefHeight="18.0" prefWidth="553.0" progress="0.0" />
+      <TextField fx:id="email" alignment="BASELINE_CENTER" layoutX="26.0" layoutY="500.0" prefHeight="25.0" prefWidth="263.0" />
+      <Label alignment="BASELINE_CENTER" layoutX="26.0" layoutY="475.0" prefHeight="17.0" prefWidth="263.0" text="Netfang" />
+      <Label alignment="BASELINE_CENTER" layoutX="313.0" layoutY="475.0" prefHeight="17.0" prefWidth="126.0" text="Fæðingardagur" />
+      <DatePicker fx:id="birthday" layoutX="313.0" layoutY="500.0" prefHeight="25.0" prefWidth="126.0" />
+      <Label alignment="BASELINE_CENTER" layoutX="451.0" layoutY="475.0" prefHeight="17.0" prefWidth="126.0" text="Þjóðerni" />
+      <ChoiceBox fx:id="nationality" layoutX="451.0" layoutY="500.0" prefHeight="25.0" prefWidth="126.0" />
+      <ChoiceBox fx:id="seatOut" layoutX="26.0" layoutY="559.0" prefHeight="25.0" prefWidth="91.0" />
+      <Label alignment="BASELINE_CENTER" layoutX="26.0" layoutY="537.0" prefHeight="17.0" prefWidth="91.0" text="Sæti Brottför" />
+      <TextField fx:id="bagsNr" layoutX="295.0" layoutY="559.0" prefHeight="25.0" prefWidth="64.0" text="1" />
+      <Label alignment="BASELINE_CENTER" layoutX="238.0" layoutY="562.0" prefHeight="17.0" prefWidth="64.0" text="Töskur:" />
+      <Label alignment="BASELINE_CENTER" layoutX="390.0" layoutY="562.0" prefHeight="17.0" prefWidth="98.0" text="Handfarangur:" />
+      <TextField fx:id="handbagsNr" layoutX="482.0" layoutY="558.0" prefHeight="25.0" prefWidth="64.0" text="1" />
+      <Label fx:id="bagPrice" alignment="BASELINE_CENTER" layoutX="229.0" layoutY="537.0" prefHeight="17.0" prefWidth="143.0" text="Verð tösku: " />
+      <Label fx:id="handbagPrice" alignment="BASELINE_CENTER" layoutX="382.0" layoutY="537.0" prefHeight="17.0" prefWidth="170.0" text="Verð handfarangurs:" />
+      <Label fx:id="progressLable" alignment="BASELINE_CENTER" layoutX="238.0" layoutY="361.0" prefHeight="17.0" prefWidth="126.0" text="Progress" />
+      <Button fx:id="confirmPassenger" layoutX="238.0" layoutY="605.0" mnemonicParsing="false" onAction="#setPassenger" prefHeight="25.0" prefWidth="126.0" text="Staðfesta Farþega" />
+      <ChoiceBox fx:id="experationMonth" layoutX="313.0" layoutY="154.0" prefHeight="25.0" prefWidth="57.0" />
+      <Label alignment="BASELINE_CENTER" layoutX="313.0" layoutY="129.0" prefHeight="17.0" prefWidth="126.0" text="Gildistími" />
+      <Label alignment="BASELINE_CENTER" layoutX="443.0" layoutY="129.0" prefHeight="17.0" prefWidth="126.0" text="Ccv" />
+      <ChoiceBox fx:id="experationYear" layoutX="383.0" layoutY="154.0" prefHeight="25.0" prefWidth="57.0" />
+      <TextField fx:id="ccvNumber" layoutX="451.0" layoutY="154.0" prefHeight="25.0" prefWidth="126.0" />
+      <Label fx:id="flightPrice" alignment="BASELINE_CENTER" layoutX="26.0" layoutY="129.0" prefHeight="17.0" prefWidth="263.0" text="Flug Verð : " />
+      <Label fx:id="hotelPrice" alignment="BASELINE_CENTER" layoutX="26.0" layoutY="146.0" prefHeight="17.0" prefWidth="263.0" text="Hotel Verð : " />
+      <Label fx:id="tourPrice" alignment="BASELINE_CENTER" layoutX="26.0" layoutY="163.0" prefHeight="17.0" prefWidth="263.0" text="Dagsferð Verð : " />
+      <Label fx:id="tripPrice" alignment="BASELINE_CENTER" layoutX="26.0" layoutY="191.0" prefHeight="17.0" prefWidth="263.0" text="Samtals : ">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="confirmBooking" disable="true" layoutX="313.0" layoutY="189.0" mnemonicParsing="false" onAction="#completeBooking" prefHeight="25.0" prefWidth="263.0" text="Staðfesta Bókun" />
+      <Label alignment="BASELINE_CENTER" layoutX="126.0" layoutY="536.0" prefHeight="17.0" prefWidth="91.0" text="Sæti Heimför" />
+      <ChoiceBox fx:id="seatHome" layoutX="126.0" layoutY="558.0" prefHeight="25.0" prefWidth="91.0" />
+   </children>
+</AnchorPane>

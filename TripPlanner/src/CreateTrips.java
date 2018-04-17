@@ -5,13 +5,13 @@ import java.text.SimpleDateFormat;
 
 
 public class CreateTrips {
-    private final ArrayList<Flight> outFlights;
-    private final ArrayList<Flight> homeFlights;
+    private final ArrayList<TripFlight> outFlights;
+    private final ArrayList<TripFlight> homeFlights;
     private final ArrayList<Hotel> hotels;
     private final ArrayList<Tour> tours;
     private ArrayList<Trip> trips;
 
-    public CreateTrips( ArrayList<Flight> outFlights, ArrayList<Flight> homeFlights, ArrayList<Hotel> hotels, ArrayList<Tour> tours) {
+    public CreateTrips( ArrayList<TripFlight> outFlights, ArrayList<TripFlight> homeFlights, ArrayList<Hotel> hotels, ArrayList<Tour> tours) {
         this.trips = new ArrayList<>();
         this.outFlights = outFlights;
         this.homeFlights = homeFlights;
@@ -82,20 +82,19 @@ public class CreateTrips {
     }
     
     // Ath hvort flugin séu pör 
-    private boolean CheckFlights(Flight outFlight, Flight homeFlight) {
-        return (outFlight.getLocation() == homeFlight.getDepartureLocation() 
-            && outFlight.getDepartureLocation() == homeFlight.getLocation()
-            && outFlight.getLocation() != homeFlight.getLocation()
-            && outFlight.getDepartureLocation() != homeFlight.getDepartureLocation()
-                );
+    private boolean CheckFlights(TripFlight outFlight, TripFlight homeFlight) {
+        return (outFlight.getLocation().equals(homeFlight.getDepartureLocation()) 
+            && outFlight.getDepartureLocation().equals(homeFlight.getLocation())
+            && !outFlight.getLocation().equals(homeFlight.getLocation())
+            && !outFlight.getDepartureLocation().equals(homeFlight.getDepartureLocation()));
     }
        
     
     public ArrayList<Trip> generateTrips() {
-        for(Flight outFlight:outFlights ) {
+        for(TripFlight outFlight:outFlights ) {
             for (Hotel hotel:hotels) {
                 for (Tour tour:tours) {
-                    for (Flight homeFlight:homeFlights) {
+                    for (TripFlight homeFlight:homeFlights) {
                         
                         if ( CheckFlights(outFlight, homeFlight)) {
                             

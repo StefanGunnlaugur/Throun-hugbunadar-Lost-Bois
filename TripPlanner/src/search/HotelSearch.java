@@ -38,7 +38,7 @@ public class HotelSearch {
         Date d14 = new Date(1525501800000L);
         Date d15 = new Date(1525528800000L);
         
-        Hotel h1 = new Hotel("hotel-1", d1, d5, "Akureyri", 10000, 3900, 0.4, "Hotel Borg", 30 );
+        Hotel h1 = new Hotel("hotel-1", d1, d5, "Akureyri", 10000, 3900, 0.4, "-- Finnum Þetta -- ", 30 );
         Hotel h2 = new Hotel("Hotel-2", d3, d6, "Reykjavík", 26000, 8000, 4.2, "Hotel Örk", 12 );
         Hotel h3 = new Hotel("hotel-3", d2, d10, "Keflavík", 15000, 3800, 1.4, "Hotel Kef", 30 );
         Hotel h4 = new Hotel("Hotel-4", d1, d15, "Reykjavík", 45600, 4500, 4.5, "Hotel Saga", 12 );
@@ -71,7 +71,7 @@ public class HotelSearch {
              if (endDate!=null && !isSameDay(endDate, hotel.getEndDate())){
                  add = false;
              }
-             if (location!=null && !location.isEmpty() && location!=hotel.getLocation()){
+             if (location!=null && !location.isEmpty() && !location.equals(hotel.getLocation())){
                  add = false;
              }
              if(add){

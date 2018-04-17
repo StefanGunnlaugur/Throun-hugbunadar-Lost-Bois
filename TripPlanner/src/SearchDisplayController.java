@@ -3,6 +3,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -24,7 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import search.Flight;
+import search.TripFlight;
 import search.FlightSearch;
 import search.Hotel;
 import search.HotelSearch;
@@ -39,13 +40,13 @@ import search.TourSearch;
 public class SearchDisplayController implements Initializable {
     
     private ObservableList<Trip> awailabletrips = FXCollections.observableArrayList();
-    private ObservableList<Flight> awailableflightsOut = FXCollections.observableArrayList();
-    private ObservableList<Flight> awailableflightsHome = FXCollections.observableArrayList();
+    private ObservableList<TripFlight> awailableflightsOut = FXCollections.observableArrayList();
+    private ObservableList<TripFlight> awailableflightsHome = FXCollections.observableArrayList();
     private ObservableList<Hotel> awailablehotels = FXCollections.observableArrayList();
     private ObservableList<Tour> awailabletours = FXCollections.observableArrayList();
     private Trip selectedTrip = null; 
-    private Flight selectedOutFlight = null;
-    private Flight selectedHomeFlight = null;
+    private TripFlight selectedOutFlight = null;
+    private TripFlight selectedHomeFlight = null;
     private Hotel selectedHotel = null;
     private Tour selectedTour = null;
     private int selectedAdults = 1, selectedChilds = 0; 
@@ -74,37 +75,37 @@ public class SearchDisplayController implements Initializable {
     @FXML
     private TableView flightsOut;       
     @FXML
-    private TableColumn<Flight, String> flOutAirlineColumn;
+    private TableColumn<TripFlight, String> flOutAirlineColumn;
     @FXML
-    private TableColumn<Flight, String> flOutOriginColumn;
+    private TableColumn<TripFlight, String> flOutOriginColumn;
     @FXML
-    private TableColumn<Flight, String> flOutDestinationColumn;
+    private TableColumn<TripFlight, String> flOutDestinationColumn;
      @FXML
-    private TableColumn<Flight, Date> flOutDateColumn;
+    private TableColumn<TripFlight, Date> flOutDateColumn;
      @FXML
-    private TableColumn<Flight, Double> flOutRatingColumn;
+    private TableColumn<TripFlight, Double> flOutRatingColumn;
     @FXML
-    private TableColumn<Flight, Double> flOutAdultPriceColumn;
+    private TableColumn<TripFlight, Integer> flOutAdultPriceColumn;
     @FXML
-    private TableColumn<Flight, Double> flOutChildPriceColumn;
+    private TableColumn<TripFlight, Integer> flOutChildPriceColumn;
     
     
     @FXML
     private TableView flightsHome;
     @FXML
-    private TableColumn<Flight, String> flHomeAirlineColumn;
+    private TableColumn<TripFlight, String> flHomeAirlineColumn;
     @FXML
-    private TableColumn<Flight, String> flHomeOriginColumn;
+    private TableColumn<TripFlight, String> flHomeOriginColumn;
     @FXML
-    private TableColumn<Flight, String> flHomeDestinationColumn;
+    private TableColumn<TripFlight, String> flHomeDestinationColumn;
     @FXML
-    private TableColumn<Flight, Date> flHomeDateColumn;
+    private TableColumn<TripFlight, Date> flHomeDateColumn;
     @FXML
-    private TableColumn<Flight, Double> flHomeRatingColumn;
+    private TableColumn<TripFlight, Double> flHomeRatingColumn;
     @FXML
-    private TableColumn<Flight, Double> flHomeAdultPriceColumn;
+    private TableColumn<TripFlight, Integer> flHomeAdultPriceColumn;
     @FXML
-    private TableColumn<Flight, Double> flHomeChildPriceColumn;
+    private TableColumn<TripFlight, Integer> flHomeChildPriceColumn;
     
     @FXML
     private TableView hotels;
@@ -118,9 +119,9 @@ public class SearchDisplayController implements Initializable {
     @FXML
     private TableColumn<Hotel, Double> hotelRatingColumn;
     @FXML
-    private TableColumn<Hotel, Double> hotelAdultPriceColumn;
+    private TableColumn<Hotel, Integer> hotelAdultPriceColumn;
     @FXML
-    private TableColumn<Hotel, Double> hotelChildPriceColumn;
+    private TableColumn<Hotel, Integer> hotelChildPriceColumn;
     
     @FXML
     private TableView tours;
@@ -129,13 +130,13 @@ public class SearchDisplayController implements Initializable {
     @FXML
     private TableColumn<Tour, Double> tourRatingColumn;
     @FXML
-    private TableColumn<Tour, Double> tourAdultPriceColumn;
+    private TableColumn<Tour, Integer> tourAdultPriceColumn;
     @FXML
     private TableColumn<Tour, String> tourDateColumn;
     @FXML
     private TableColumn<Tour, String> tourLocationColumn;
     @FXML
-    private TableColumn<Tour, Double> tourChildPriceColumn;
+    private TableColumn<Tour, Integer> tourChildPriceColumn;
     
     @FXML
     private TableView trips;
@@ -156,9 +157,9 @@ public class SearchDisplayController implements Initializable {
     @FXML
     private TableColumn<Trip, Double> tripsRatingcolumn;
     @FXML
-    private TableColumn<Trip, Double> tripsAdultPricecolumn;
+    private TableColumn<Trip, Integer> tripsAdultPricecolumn;
     @FXML
-    private TableColumn<Trip, Double> tripsChildPricecolumn;
+    private TableColumn<Trip, Integer> tripsChildPricecolumn;
    
     
     @FXML
@@ -189,20 +190,24 @@ public class SearchDisplayController implements Initializable {
         FlightSearch fsHome = new FlightSearch(ED, dest, depart);
         HotelSearch hs = new HotelSearch(SD, ED, dest);
         TourSearch ts = new TourSearch(SD, ED, dest);
-               
-        awailableflightsOut = FXCollections.observableArrayList(fsOut.getFlights());
+         
+        ArrayList<TripFlight> searchFlightsOut = fsOut.returnFlights();
+        awailableflightsOut = FXCollections.observableArrayList(searchFlightsOut);
         showOutFlights(awailableflightsOut);
                 
-        awailableflightsHome = FXCollections.observableArrayList(fsHome.getFlights());
+        ArrayList<TripFlight> searchFlightsHome = fsHome.returnFlights();
+        awailableflightsHome = FXCollections.observableArrayList(searchFlightsHome);
         showHomeFlights(awailableflightsHome);
-                
-        awailablehotels = FXCollections.observableArrayList(hs.getHotels());
+        
+        ArrayList<Hotel> searchHotels = hs.getHotels();
+        awailablehotels = FXCollections.observableArrayList(searchHotels);
         showHotels(awailablehotels);
-                
-        awailabletours = FXCollections.observableArrayList(ts.getTours());
+              
+        ArrayList<Tour> searchTours = ts.getTours();
+        awailabletours = FXCollections.observableArrayList(searchTours);
         showTours(awailabletours);               
         
-        CreateTrips Create = new CreateTrips(fsOut.getFlights(), fsHome.getFlights(), hs.getHotels(), ts.getTours());
+        CreateTrips Create = new CreateTrips(searchFlightsOut, searchFlightsHome, searchHotels, searchTours);
         awailabletrips = FXCollections.observableArrayList(Create.generateTrips());
         showTrips(awailabletrips);       
     }
@@ -236,7 +241,7 @@ public class SearchDisplayController implements Initializable {
     @FXML
     public void selectedOutFlight(MouseEvent event){
         this.selectedTrip = null;
-        this.selectedOutFlight = (Flight) flightsOut.getSelectionModel().getSelectedItem();
+        this.selectedOutFlight = (TripFlight) flightsOut.getSelectionModel().getSelectedItem();
         updatePrice();
         tryMakingTrip();
     }
@@ -244,7 +249,7 @@ public class SearchDisplayController implements Initializable {
     @FXML
     public void selectedHomeFlight(MouseEvent event){
         this.selectedTrip = null;
-        this.selectedHomeFlight = (Flight) flightsHome.getSelectionModel().getSelectedItem();
+        this.selectedHomeFlight = (TripFlight) flightsHome.getSelectionModel().getSelectedItem();
         updatePrice();
         tryMakingTrip();
     }
@@ -286,10 +291,8 @@ public class SearchDisplayController implements Initializable {
         stage.setScene(new Scene(root1));
         stage.show();
         } catch (Exception e) {
-            System.out.println("error opening booking  -- " + e);
-        }
-        //this.bookingDisplayController = new BookingDisplayController(selectedTrip, selectedAdults, selectedChilds );
-        //bookingController.showBooking();        
+            System.out.println("error opening booking");
+        }       
     }
     
     
@@ -338,7 +341,7 @@ public class SearchDisplayController implements Initializable {
         tripsChildPricecolumn.setCellValueFactory(new PropertyValueFactory<>("childPrice"));        
     }
     
-    public void showOutFlights(ObservableList<Flight> showFlights) {
+    public void showOutFlights(ObservableList<TripFlight> showFlights) {
         flightsOut.setItems(showFlights);
         flOutAirlineColumn.setCellValueFactory(new PropertyValueFactory<>("airline"));
         flOutOriginColumn.setCellValueFactory(new PropertyValueFactory<>("departureLocation"));
@@ -349,7 +352,7 @@ public class SearchDisplayController implements Initializable {
         flOutChildPriceColumn.setCellValueFactory(new PropertyValueFactory<>("childPrice"));
     }
     
-    public void showHomeFlights(ObservableList<Flight> showFlights) {
+    public void showHomeFlights(ObservableList<TripFlight> showFlights) {
         flightsHome.setItems(showFlights);
         flHomeAirlineColumn.setCellValueFactory(new PropertyValueFactory<>("airline"));
         flHomeOriginColumn.setCellValueFactory(new PropertyValueFactory<>("departureLocation"));
@@ -416,7 +419,7 @@ public class SearchDisplayController implements Initializable {
         ObservableList<String> depart = FXCollections.observableArrayList();
         ObservableList<String> dest = FXCollections.observableArrayList();
         
-        for(Flight fl: awailableflightsOut){
+        for(TripFlight fl: awailableflightsOut){
             if(!depart.contains(fl.getDepartureLocation())){
                 depart.add(fl.getDepartureLocation());
             }
