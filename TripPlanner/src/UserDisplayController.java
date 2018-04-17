@@ -43,8 +43,9 @@ import search.TripFlight;
 public class UserDisplayController implements Initializable {
     
     private Trip trip;
-    private int adults, childs, passengerCount,
-            currPassenger, luggagePrice, handLuggagePrice;
+    private int adults, childs, passengerCount, totalPrice,
+            currPassenger, luggagePrice, handLuggagePrice,
+            totalFlightPrice, totalHotelPrice, totalTourPrice;
     private Long  bookingNumberOut, bookingNumberHome;
     private List<String> availableSeatListOut, availableSeatListHome;
     private TripFlight flightOut, flightHome;
@@ -117,6 +118,13 @@ public class UserDisplayController implements Initializable {
         this.adults = adults;
         this.childs = childs;  
         this.passengerCount = adults + childs;
+        
+        this.totalFlightPrice = (trip.getOutFlight().getAdultPrice()+trip.getHomeFlight().getAdultPrice())*adults 
+                + (trip.getOutFlight().getChildPrice() + trip.getHomeFlight().getChildPrice())*childs;
+        this.totalHotelPrice = trip.getHotel().getAdultPrice()*adults + trip.getHotel().getChildPrice()*childs;
+        this.totalTourPrice = trip.getTour().getAdultPrice()*adults + trip.getTour().getChildPrice()*childs;
+        this.totalPrice = totalFlightPrice + totalHotelPrice + totalTourPrice;
+        
         this.flightOut = trip.getOutFlight();
         this.flightHome = trip.getHomeFlight();
         this.availableSeatListOut = flightOut.getAvailableSeatList();
@@ -132,23 +140,8 @@ public class UserDisplayController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setInputs();
-    }  
-    
-    @FXML
-    public void completeBooking(ActionEvent event) {
-        String cardHolder = cardholder.getText().trim();
-        String cardNumber = cardnumber.getText().trim();
-        String expMonth = experationMonth.getSelectionModel().getSelectedItem().trim();
-        String expYear = experationYear.getSelectionModel().getSelectedItem().trim();
-        LocalDate expDay = getExpDay(expMonth, expYear);
-        String csv = ccvNumber.getText();
-        
-        Booking booingOut = new Booking(flightOut.getFlight(), passengersOut, cardHolder, cardNumber, expDay, csv);
-        bookOut(passengersOut, booingOut);
-        Booking booingHome = new Booking(flightHome.getFlight(), passengersHome, cardHolder, cardNumber, expDay, csv);
-        bookOut(passengersOut, booingHome);
     }
-
+    
     public void setInputs() {
         updateProgress();
         bagPrice.setText("Verð tösku: " + luggagePrice + "kr");
@@ -160,21 +153,14 @@ public class UserDisplayController implements Initializable {
         seatHome.getItems().addAll(availableSeatListHome);
         nationality.getItems().addAll("Ísland", "Noregur", "Danmörk", "Svíþjóð", "Færeyjar", "Grænland");
         nationality.setValue("Þjóðerni");
-    }   
+        updatePrices();
+    }  
     
-    public LocalDate getExpDay(String expMonth, String expYear) {
-        int year = Integer.valueOf(expYear);
-        int month = Integer.valueOf(expMonth);
-        int day;
-        if (expMonth == "02") {
-            day = 28;
-        } else if (expMonth == "04" || expMonth == "06" || expMonth == "09" || expMonth == "10") {
-            day = 30;
-        } else {
-            day = 31;
-        }
-        LocalDate expDay = LocalDate.of(year, month, day);
-        return expDay;
+    private void updatePrices() {
+        flightPrice.setText("Flug verð: " + totalFlightPrice + "kr");
+        hotelPrice.setText("Hotel verð: " + totalHotelPrice + "kr");
+        tourPrice.setText("Dagsferð verð: " + totalTourPrice + "kr");
+        tripPrice.setText("Samtals : " + totalPrice + "kr");   
     }
 
     private void updateProgress() {
@@ -183,10 +169,11 @@ public class UserDisplayController implements Initializable {
             progressBar.setProgress(currPassenger/(passengerCount*1.0));
         } else {
             confirmBooking.setDisable(false);
+            confirmPassenger.setDisable(true);
         }
     }
     
-    @FXML
+    @FXML // Get inputs for passegner, add to lists
     public void setPassenger(ActionEvent event) {
         String fname = firstName.getText().trim();
         String lname = lastName.getText().trim();
@@ -197,16 +184,52 @@ public class UserDisplayController implements Initializable {
         LocalDate bd = birthday.getValue();
         int handLuggage = Integer.parseInt(handbagsNr.getText().trim());
         int luggage = Integer.parseInt(bagsNr.getText().trim());
+        
+        // Update total price
+        totalFlightPrice = totalFlightPrice + handLuggage*handLuggagePrice + luggage*luggagePrice;
+        totalPrice = totalFlightPrice + totalHotelPrice + totalTourPrice;
+        
+        // Add passenger to passenger Out
         Passenger passOut = new Passenger(fname, lname, mail, bd, nat, handLuggage, luggage, seatO );
         takenSeatsOut.add(seatO);
         passengersOut.add(passOut);
+        takenSeatsOut.add(seatO);
+        seatsToRemoveOut.add(seatO);
+                
+        // Add passenger to passenger Home
         Passenger passHome = new Passenger(fname, lname, mail, bd, nat, handLuggage, luggage, seatH );
         takenSeatsHome.add(seatH);
         passengersHome.add(passHome);
+        takenSeatsHome.add(seatO);
+        seatsToRemoveHome.add(seatO);
         
+        // Reset for next passenger
         currPassenger++;
+        updateSelectableSeatList();
+        updatePrices();
         updateProgress();
         clearInputs();
+    }
+    
+    private void updateSelectableSeatList() {
+        for (String takenSeat: takenSeatsOut){
+            if (availableSeatListOut.contains(takenSeat)){
+                availableSeatListOut.remove(takenSeat);
+            }
+        }
+         for (String takenSeat: takenSeatsHome){
+            if (availableSeatListHome.contains(takenSeat)){
+                availableSeatListHome.remove(takenSeat);
+            }
+        }
+    }
+    
+    @FXML // Get inputs for passegner, add to lists
+    public void luggageChanged(ActionEvent event) {
+        int handLuggage = Integer.parseInt(handbagsNr.getText().trim());
+        int luggage = Integer.parseInt(bagsNr.getText().trim());
+        int currPrice = totalFlightPrice + handLuggage*handLuggagePrice + luggage*luggagePrice;
+        flightPrice.setText("Flug verð: " + currPrice + "kr");        
     }
     
     public void clearInputs(){
@@ -214,8 +237,10 @@ public class UserDisplayController implements Initializable {
         lastName.setText("");
         email.setText("");
         nationality.getSelectionModel().clearSelection();
-        seatOut.getSelectionModel().clearSelection();
-        seatHome.getSelectionModel().clearSelection();
+        seatOut.getItems().clear();
+        seatOut.getItems().addAll(availableSeatListOut);
+        seatHome.getItems().clear();
+        seatHome.getItems().addAll(availableSeatListHome);
         birthday.getEditor().clear();
         handbagsNr.setText("1");
         bagsNr.setText("1");
@@ -242,6 +267,40 @@ public class UserDisplayController implements Initializable {
         passengersWithIdHome.add(passenger);
     }
     
+    
+    @FXML
+    public void completeBooking(ActionEvent event) {
+        String cardHolder = cardholder.getText().trim();
+        String cardNumber = cardnumber.getText().trim();
+        String expMonth = experationMonth.getSelectionModel().getSelectedItem().trim();
+        String expYear = experationYear.getSelectionModel().getSelectedItem().trim();
+        LocalDate expDay = getExpDay(expMonth, expYear);
+        String csv = ccvNumber.getText();
+        
+        // Book flight Out 
+        Booking bookingOut = new Booking(flightOut.getFlight(), passengersOut, cardHolder, cardNumber, expDay, csv);
+        // Book flight home
+        Booking booingHome = new Booking(flightHome.getFlight(), passengersHome, cardHolder, cardNumber, expDay, csv);
+        bookFlight(passengersOut, passengersHome, bookingOut, booingHome);
+        bookingConfirmed();
+        Stage stage = (Stage) confirmBooking.getScene().getWindow();
+        stage.close();
+    }
+    
+    public LocalDate getExpDay(String expMonth, String expYear) {
+        int year = Integer.valueOf(expYear);
+        int month = Integer.valueOf(expMonth);
+        int day;
+        if (expMonth == "02") {
+            day = 28;
+        } else if (expMonth == "04" || expMonth == "06" || expMonth == "09" || expMonth == "10") {
+            day = 30;
+        } else {
+            day = 31;
+        }
+        LocalDate expDay = LocalDate.of(year, month, day);
+        return expDay;
+    }
     /**
      * Calls a function in the bookingService class that inserts Booking into
      * the DB. After the booking have been added the availableSeatList in the
@@ -249,12 +308,12 @@ public class UserDisplayController implements Initializable {
      *
      * @param booking
      */
-    private void addBooking(Booking booking) {
+    private void addBooking(Booking bookingOut, Booking bookingHome) {
         BookingService bs = new BookingService();
         int[] passengersIntArrayOut = generatePassengersIdArray(passengersWithIdOut);
         int[] passengersIntArrayHome = generatePassengersIdArray(passengersWithIdHome);
-        bookingNumberOut = bs.insertBooking(booking, flightOut.getFlight(), passengersIntArrayOut, adults, childs);
-        bookingNumberHome = bs.insertBooking(booking, flightHome.getFlight(), passengersIntArrayHome, adults, childs);
+        bookingNumberOut = bs.insertBooking(bookingOut, flightOut.getFlight(), passengersIntArrayOut, adults, childs);
+        bookingNumberHome = bs.insertBooking(bookingHome, flightHome.getFlight(), passengersIntArrayHome, adults, childs);
         updateAvailableSeatList();
     }
     
@@ -292,18 +351,29 @@ public class UserDisplayController implements Initializable {
         return passengersIntArray;
     }
     
-    private void bookOut(List<Passenger> passengers, Booking booking){
+    private void bookFlight(List<Passenger> passOut, List<Passenger> passHome, Booking bookingOut, Booking bookingHome){
         //add every passenger into DB and generate passenger id.
-        passengers.forEach(p -> {
+        passOut.forEach(p -> {
             addPassengerOut(p);
         });
-        addBooking(booking);
-    } 
-    private void bookHome(List<Passenger> passengers, Booking booking){
-        //add every passenger into DB and generate passenger id.
-        passengers.forEach(p -> {
+         passHome.forEach(p -> {
             addPassengerHome(p);
         });
-        addBooking(booking);
-    }    
+        addBooking(bookingOut, bookingHome);
+    }
+    
+    private void bookingConfirmed(){
+        try {
+        BookingConfirmedController bookingConfirm = new BookingConfirmedController(bookingNumberOut, bookingNumberHome, totalPrice );
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BookingConfirmed.fxml"));
+        fxmlLoader.setController(bookingConfirm);
+        Parent root3 = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root3));
+        stage.show();
+        } catch (Exception e) {
+            System.out.println("error opening booking");
+        }   
+    }
+    
 }

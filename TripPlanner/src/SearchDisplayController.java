@@ -1,6 +1,7 @@
 
 import java.net.URL;
 import java.time.LocalDate;
+import static java.time.LocalDate.now;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -213,15 +215,19 @@ public class SearchDisplayController implements Initializable {
     }
     
     @FXML
-    public void search(MouseEvent event){
+    public void search(ActionEvent event){
         Date SD = null, ED = null;
         String depart = null, dest = null;
-        if (startDate.getValue()!=null){
-            SD = Date.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        if (startDate.getValue()==null){
+            startDate.setValue(now());
         }
-        if(endDate.getValue()!=null){
-            ED = Date.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        SD = Date.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                
+        if(endDate.getValue()==null){
+            endDate.setValue(now().plusWeeks(1));
         }
+        ED = Date.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        
         if(departure.getSelectionModel().getSelectedItem()!=null){
             depart = departure.getSelectionModel().getSelectedItem();
         }
@@ -281,7 +287,8 @@ public class SearchDisplayController implements Initializable {
     }
     
     @FXML
-    public void bookTrip(MouseEvent event) {
+    public void bookTrip(ActionEvent event) {
+        updatePrice();
         try {
         BookingDisplayController bookingController = new BookingDisplayController(selectedTrip, selectedAdults, selectedChilds );
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BookingDisplay.fxml"));
@@ -297,7 +304,7 @@ public class SearchDisplayController implements Initializable {
     
     
     @FXML
-    public void filterTrips() {
+    public void filterTrips(ActionEvent event) {
         Results res = new Results();        
         if(!minRating.getText().trim().isEmpty()) {
             double filterRating  = Double.parseDouble(minRating.getText().trim());
@@ -456,9 +463,11 @@ public class SearchDisplayController implements Initializable {
             }
         };             
         startDate.setConverter(converter);
+        startDate.setValue(now());
         startDate.setPromptText(pattern.toLowerCase());
         startDate.requestFocus();
         endDate.setConverter(converter);
+        endDate.setValue(now().plusWeeks(1));
         endDate.setPromptText(pattern.toLowerCase());
         endDate.requestFocus();
     } 

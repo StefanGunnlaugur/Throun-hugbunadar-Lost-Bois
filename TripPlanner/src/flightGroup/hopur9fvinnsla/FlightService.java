@@ -130,6 +130,98 @@ public class FlightService {
         return flights;
     }
     
+     public List<Flight> alternetiveGetFlights(String origin, String dest, LocalDate date) {
+        List<Flight> flights = new ArrayList<Flight>();
+        Connection conn = null;
+        Statement stmt = null;
+        String query = "";
+
+        if(origin!=null && !origin.isEmpty()) {
+            if (query.isEmpty()){
+                query = "WHERE ";
+            } else {
+                query = query + " AND ";
+            }
+            query = query + "origin LIKE '%" + origin + "%' "; 
+        }
+        if(dest!=null && !dest.isEmpty()) {
+            if (query.isEmpty()){
+                query = "WHERE ";
+            } else {
+                query = query + " AND ";
+            }
+            query = query + "destination LIKE '%" + dest + "%' ";             
+        }
+        if(date!=null){ 
+            if (query.isEmpty()){
+                query = "WHERE ";
+            } else {
+                query = query + " AND ";
+            }
+            query = query + "date_trunc('day', departure) = '" + date + "'";
+        }
+
+        try {
+            conn = this.getConnection();
+            stmt = conn.createStatement();
+            // Timestamp timeStampDate = Timestamp.valueOf(date.atStartOfDay());
+            String sql = "SELECT * FROM flights "
+                    + query;
+            System.out.println("sql" + sql);
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                //Retrieve by column name
+                int id = rs.getInt("id");
+                String airline = rs.getString("airline");
+                String flightnumber = rs.getString("flightnumber");
+                origin = rs.getString("origin");
+                String destination = rs.getString("destination");
+                int adultPrice = rs.getInt("adultprice");
+                int childPrice = rs.getInt("childPrice");
+                Timestamp departure = rs.getTimestamp("departure");
+                Timestamp arrival = rs.getTimestamp("arrival");
+                int duration = rs.getInt("duration");
+                int handLuggagePrice = rs.getInt("handluggageprice");
+                int luggagePrice = rs.getInt("luggagePrice");
+                boolean disabilityAccess = rs.getBoolean("disabilityaccess");
+                boolean animalTransfer = rs.getBoolean("animaltransfer");
+                Array availableSeatListArray = rs.getArray("availableseatlist");
+                //Set availableSeatList on correct form.
+                String[] availableSeatListString = (String[]) availableSeatListArray.getArray();
+                ArrayList<String> availableSeatList = new ArrayList<String>(Arrays.asList(availableSeatListString));
+                //Create new flight.
+                Flight flight = new Flight(airline, flightnumber, origin, destination, adultPrice, childPrice, departure, arrival, duration, handLuggagePrice, luggagePrice, disabilityAccess, animalTransfer);
+                flight.setId(id);
+                flight.setAvailableSeatList(availableSeatList);
+                //Add the flight into the flight list.
+                flights.add(flight);
+            }
+            rs.close();
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            //finally block used to close resources
+            try {
+                if (stmt != null) {
+                    conn.close();
+                }
+            } catch (SQLException se) {
+            }// do nothing
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }//end finally try
+        }//end try
+        return flights;
+    }
+    
     public List<Flight> getAllFlights(LocalDate date1, LocalDate date2) {
         List<Flight> flights = new ArrayList<Flight>();
         Connection conn = null;

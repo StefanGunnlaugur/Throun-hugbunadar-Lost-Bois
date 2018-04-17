@@ -4,6 +4,7 @@ import flightGroup.hopur9fvinnsla.Flight;
 import flightGroup.hopur9fvinnsla.FlightService;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import static java.time.LocalDate.now;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,18 +27,17 @@ public class FlightSearch {
         if(inputdate==null && departureLocation == null && location == null){
              searchFlights= fs.getAllFlights(LocalDate.of(2018,05,1), LocalDate.of(2018,05,4));
         }else {
-        /*
-        if(departureLocation == null){
-            departureLocation = "Reykjavík";
-        }
-        if(location == null){
-            location = "Akureyri";
-        }*/
+            
         this.flights = new ArrayList<TripFlight>();
-        this.date = inputdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        
+        if(inputdate!=null){
+            this.date = inputdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }else {
+            this.date = now().plusWeeks(2);
+        }
         this.destination = location;
         this.origin = departureLocation;
-        searchFlights = fs.getFlights(origin, destination, date);
+        searchFlights = fs.alternetiveGetFlights(origin, destination, date);
         }
         Random r = new Random();
         for(Flight flight : searchFlights){

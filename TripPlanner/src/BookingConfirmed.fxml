@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="219.0" prefWidth="362.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="close" layoutX="264.0" layoutY="172.0" mnemonicParsing="false" onAction="#ok" prefHeight="37.0" prefWidth="89.0" text="ok" />
+      <Label fx:id="flightOutID" alignment="BASELINE_CENTER" layoutX="14.0" layoutY="48.0" prefHeight="17.0" prefWidth="339.0" text="Bókunarnúmer brottfarar flugs: " />
+      <Label alignment="BASELINE_CENTER" layoutX="14.0" layoutY="14.0" prefHeight="20.0" prefWidth="339.0" text="Bókunin hefur verið móttekin">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="flightHomeID" alignment="BASELINE_CENTER" layoutX="14.0" layoutY="71.0" prefHeight="17.0" prefWidth="339.0" text="Bókunarnúmer heimfarar flugs: " />
+      <Label fx:id="hotelId" alignment="BASELINE_CENTER" layoutX="14.0" layoutY="95.0" prefHeight="17.0" prefWidth="339.0" text="Bókunarnúmer hótels: " />
+      <Label fx:id="tourId" alignment="BASELINE_CENTER" layoutX="14.0" layoutY="119.0" prefHeight="17.0" prefWidth="339.0" text="Bókunarnúmer dagsferðar: " />
+      <Label fx:id="totalPrice" alignment="BASELINE_CENTER" layoutX="14.0" layoutY="143.0" prefHeight="17.0" prefWidth="339.0" text="Gjaldfært: " />
+   </children>
+</AnchorPane>
