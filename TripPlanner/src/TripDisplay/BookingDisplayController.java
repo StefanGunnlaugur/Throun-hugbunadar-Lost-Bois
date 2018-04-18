@@ -1,9 +1,12 @@
+package TripDisplay;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
+import TripProcess.Trip;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -17,9 +20,9 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import search.TripFlight;
-import search.Hotel;
-import search.Tour;
+import TripProcess.TripFlight;
+import TripProcess.TripHotel;
+import TripProcess.Tour;
 
 /**
  * FXML Controller class
@@ -57,7 +60,7 @@ public class BookingDisplayController implements Initializable {
     public void  showBooking(){
         TripFlight oFl = trip.getOutFlight();
         TripFlight hFl = trip.getHomeFlight();
-        Hotel h = trip.getHotel();
+        TripHotel h = trip.getHotel();
         Tour t = trip.getTour();
         flightOut.setText("Frá : " + oFl.getDepartureLocation() 
                 + ", Til : " + oFl.getLocation() 
@@ -74,13 +77,13 @@ public class BookingDisplayController implements Initializable {
         hotel.setText("Hótel : " + h.getName() 
                 + ", Staðsetning : " + h.getLocation()
                 + ", Bókunartími : " + h.getShortDate()
-                + ", Heildar verð : " + (h.getAdultPrice()*adults + h.getChildPrice()*childs) + "kr");
+                + ", Heildar verð : " + h.getTotalPrice() + "kr");
         tour.setText("Ferð : " + t.getName()
                 + ", Tímasetning : " + t.getShortDate()
                 + ", Staðsetning : " + t.getLocation()
                 + ", Heildar verð : " + (t.getAdultPrice()*adults + t.getChildPrice()*childs) + "kr");
         people.setText("Fullorðnir : " + adults + ", Börn : " + childs);
-        price.setText((trip.getAdultPrice()*adults + trip.getChildPrice()*childs) + "kr");
+        price.setText((trip.getAdultPrice()*adults + trip.getChildPrice()*childs + trip.getHotel().getTotalPrice()) + "kr");
     }
 
     /**

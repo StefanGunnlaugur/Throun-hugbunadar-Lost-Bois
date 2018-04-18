@@ -1,3 +1,5 @@
+package TripProcess;
+
 
 public class User {
     private String id, fName, lName, email;

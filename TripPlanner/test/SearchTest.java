@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import TripDisplay.Main;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,16 +17,16 @@ import static org.junit.Assert.*;
  * @author Palli
  */
 public class SearchTest {
-    private Search flights, hotels, tours;
+    private Main flights, hotels, tours;
     
     public SearchTest() {
     }
     
     @Before
     public void setUp() {
-        flights = new Search("Akureyri", "date", "date");
-        hotels = new Search("Hotel Borg", "date", "date");
-        tours = new Search("Reykjavik", "date", "date");
+        flights = new Main("Akureyri", "date", "date");
+        hotels = new Main("Hotel Borg", "date", "date");
+        tours = new Main("Reykjavik", "date", "date");
     }
     
     @After

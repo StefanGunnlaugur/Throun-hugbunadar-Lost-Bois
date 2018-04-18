@@ -1,25 +1,63 @@
-package search;
+package TripProcess;
 
+import hotelGroup.Model.Hotel;
+import hotelGroup.Model.Room;
+import hotelGroup.Model.SearchList;
+import static hotelGroup.Model.SearchList.getAllHotel;
+import static hotelGroup.Model.SearchList.getHotel;
+import static hotelGroup.Model.SearchList.getHotel;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Random;
 
 public class HotelSearch {
 
     // Talar við db hjá hinum hópunum 
-    private ArrayList<Hotel> hotels; 
-    private Date startDate, enddate;
+    private ArrayList<TripHotel> hotels;
+    private LocalDate startDate, endDate;
     private String location;
-
     
-    public HotelSearch(Date startDate, Date endDate, String location) {
-        this.hotels = new ArrayList<Hotel>();
-        this.startDate = startDate;
-        this.enddate = endDate;
+    public HotelSearch(Date SD, Date ED, String location, int adults, int childs) {
+        this.hotels = new ArrayList<TripHotel>();
         this.location = location;
+        if (startDate!=null && endDate!=null){
+            this.startDate = SD.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            this.endDate = ED.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
+        
+        ArrayList<Hotel> searchHotels = getAllHotel();       
+        LocalDate[] dates = {startDate, endDate};
+        Random r = new Random();
+        
+        for(Hotel hotel: searchHotels){
+            String hotelLocat = hotel.getLocationOfHotel(); 
+            if(hotelLocat.equals("Egilsstadir")) { hotelLocat = "Egilsstaðir";}
+            if(hotelLocat.equals("Isafjördur")) { hotelLocat = "Ísafjörður";}
+            if(location== null || location.isEmpty() || hotelLocat.equals(location)) {
+                double ratingFix = 1 + (5 - 1) * r.nextDouble();
+                ratingFix = Math.round(ratingFix*10);
+                for( Room room : hotel.rooms){
+                    if (room.isAvailable(dates)){
+                        TripHotel currHotel = new TripHotel( room.getRoomId()+"", 
+                                SD, ED, hotelLocat, 
+                                room.getPriceForNight(), room.getPriceForNight(),  
+                                ratingFix/10, hotel.getNameOfHotel(), room.getRoomId());
+                        hotels.add(currHotel);
+                    }
+                }
+            }
+        }
         
         
+        
+        
+        
+        
+        /*       
         // --------- FAKE DATA FOR TESTING --------
         ArrayList<Hotel> testing = new ArrayList<Hotel>();
         Date d1 = new Date(1525166100000L);
@@ -77,15 +115,12 @@ public class HotelSearch {
              if(add){
                  this.hotels.add(hotel);
              }
-        }
+        }*/
+        
+        
     }
-    
-    private boolean isSameDay (Date date1, Date date2) {
-        SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
-        return fmt.format(date1).equals(fmt.format(date2));
-    }
-    
-    public ArrayList<Hotel> getHotels() {
+        
+    public ArrayList<TripHotel> getHotels() {
         return this.hotels;
     }
     

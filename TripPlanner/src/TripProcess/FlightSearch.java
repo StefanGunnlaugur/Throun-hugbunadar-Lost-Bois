@@ -1,4 +1,4 @@
-package search;
+package TripProcess;
 
 import flightGroup.hopur9fvinnsla.Flight;
 import flightGroup.hopur9fvinnsla.FlightService;
@@ -25,7 +25,7 @@ public class FlightSearch {
         List<Flight> searchFlights;
         
         if(inputdate==null && departureLocation == null && location == null){
-             searchFlights= fs.getAllFlights(LocalDate.of(2018,05,1), LocalDate.of(2018,05,4));
+             searchFlights= fs.getAllFlights(LocalDate.of(2018,05,1), LocalDate.of(2018,05,1).plusWeeks(1));
         }else {
             
         this.flights = new ArrayList<TripFlight>();
@@ -33,7 +33,7 @@ public class FlightSearch {
         if(inputdate!=null){
             this.date = inputdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         }else {
-            this.date = now().plusWeeks(2);
+            this.date = LocalDate.of(2018,05,1);
         }
         this.destination = location;
         this.origin = departureLocation;
@@ -101,11 +101,6 @@ public class FlightSearch {
                 this.flights.add(flight);
              }
         }*/
-    }
-    
-    private boolean isSameDay (Date date1, Date date2) {
-        SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
-        return fmt.format(date1).equals(fmt.format(date2));
     }
     
     public ArrayList<TripFlight> returnFlights() {

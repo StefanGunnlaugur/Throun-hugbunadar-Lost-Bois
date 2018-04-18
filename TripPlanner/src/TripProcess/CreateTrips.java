@@ -1,17 +1,22 @@
+package TripProcess;
 
+
+import TripProcess.Trip;
+import TripProcess.TripFlight;
+import TripProcess.TripHotel;
+import TripProcess.Tour;
 import java.util.*;
-import search.*;
 import java.text.SimpleDateFormat;
 
 
 public class CreateTrips {
     private final ArrayList<TripFlight> outFlights;
     private final ArrayList<TripFlight> homeFlights;
-    private final ArrayList<Hotel> hotels;
+    private final ArrayList<TripHotel> hotels;
     private final ArrayList<Tour> tours;
     private ArrayList<Trip> trips;
 
-    public CreateTrips( ArrayList<TripFlight> outFlights, ArrayList<TripFlight> homeFlights, ArrayList<Hotel> hotels, ArrayList<Tour> tours) {
+    public CreateTrips( ArrayList<TripFlight> outFlights, ArrayList<TripFlight> homeFlights, ArrayList<TripHotel> hotels, ArrayList<Tour> tours) {
         this.trips = new ArrayList<>();
         this.outFlights = outFlights;
         this.homeFlights = homeFlights;
@@ -34,17 +39,25 @@ public class CreateTrips {
     }
        
     // Reiknar fjarlægð milli 2. punkta 
-    private static double CalculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    private double CalculateDistance(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
-        double dist = Math.sin(Math.toRadians(lat1)) 
-                * Math.sin(Math.toRadians(lat2)) 
-                + Math.cos(Math.toRadians(lat1)) 
-                * Math.cos(Math.toRadians(lat2)) 
-                * Math.cos(Math.toRadians(theta));
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) 
+                + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) 
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
         dist = Math.acos(dist);
         dist = Math.toDegrees(dist);
-        dist = dist * 60 * 1.1515;
-        return (dist);
+        dist = dist * 60 * 1.1515 * 1.609344;
+        return dist;
+    }
+  
+    private double deg2rad(double deg) {
+      return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+      return (rad * 180.0 / Math.PI);
     }
     
     // Ath hvort dagsetningar eru sama dag, diff er skekkuumörk á deinni degi
@@ -67,11 +80,11 @@ public class CreateTrips {
     
     // Ath hvort dagsetningar virka, dist er vegalengir milli staða
     // hægt að ca. út hvað meikar sense sem tími/vegalengd
-    private boolean CheckDate(Date fSD, Date fED, Date hSD, Date hED, Date tSD, Date tED, double[] dist, long fDuration ) {
+    private boolean CheckDate(Date fSD, Date fED, Date hSD, Date hED, Date tSD, Date tED, long fDuration ) {
         // útfæra 
         // Ath - flug + tími flugs < hótel, ferð < brottför
         long mis = 1800000L; // 30 min
-        Date fArrival = new Date(fSD.getTime() + fDuration + mis + (long)dist[2]*60000);
+        Date fArrival = new Date(fSD.getTime() + fDuration + mis);
               
         // Tour er á milli flugtíma, og hotel er +-1 dag í kringum flug
         if ( tSD.after(fArrival) && tED.before(fED) 
@@ -88,27 +101,35 @@ public class CreateTrips {
             && !outFlight.getLocation().equals(homeFlight.getLocation())
             && !outFlight.getDepartureLocation().equals(homeFlight.getDepartureLocation()));
     }
+    
+    // Ath hvort flugin séu pör 
+    private boolean CheckLocations(TripFlight f, TripHotel h, Tour t) {
+        return (f.getLocation().equals(h.getLocation()) 
+            && h.getLocation().equals(t.getLocation()));
+    }
        
     
     public ArrayList<Trip> generateTrips() {
         for(TripFlight outFlight:outFlights ) {
-            for (Hotel hotel:hotels) {
+            for (TripHotel hotel:hotels) {
                 for (Tour tour:tours) {
                     for (TripFlight homeFlight:homeFlights) {
                         
                         if ( CheckFlights(outFlight, homeFlight)) {
-                            
+                            /*
                             double fLat = outFlight.getLat(), fLon= outFlight.getLon();
                             double hLat = hotel.getLat(), hLon= hotel.getLon();
                             double tLat = tour.getLat(), tLon= tour.getLon();
-                            double[] dist = CheckDistance(100, fLat, fLon, hLat, hLon, tLat, tLon);
-
-                            if (dist.length > 0) {
+                            double[] dist = CheckDistance(100, fLat, fLon, hLat, hLon, tLat, tLon);*/
+                            //System.out.println("---------");
+                            //dist.length > 0
+                            if (CheckLocations(outFlight, hotel, tour)) {
+                                //System.out.println("Distance ok");
                                 Date fSD = outFlight.getStartDate(), fED= homeFlight.getEndDate();                        
                                 Date hSD = hotel.getStartDate(), hED= hotel.getEndDate();
                                 Date tSD = tour.getStartDate(), tED= tour.getEndDate();
                                 long fDuration = outFlight.getDuration(); 
-                                if (CheckDate( fSD, fED, hSD, hED, tSD, tED, dist, fDuration)) {
+                                if (CheckDate( fSD, fED, hSD, hED, tSD, tED, fDuration)) {
                                     Trip trip = new Trip(outFlight, homeFlight, hotel, tour);
                                     trips.add(trip);
                                 }                        

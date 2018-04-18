@@ -1,9 +1,12 @@
+package TripDisplay;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
+import TripProcess.Trip;
 import flightGroup.hopur9fvinnsla.Booking;
 import flightGroup.hopur9fvinnsla.BookingService;
 import flightGroup.hopur9fvinnsla.FlightService;
@@ -33,7 +36,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import search.TripFlight;
+import TripProcess.TripFlight;
+import hotelGroup.databases.DatabaseConnection;
+import static hotelGroup.databases.DatabaseConnection.createBooking;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 
 /**
  * FXML Controller class
@@ -47,6 +54,7 @@ public class UserDisplayController implements Initializable {
             currPassenger, luggagePrice, handLuggagePrice,
             totalFlightPrice, totalHotelPrice, totalTourPrice;
     private Long  bookingNumberOut, bookingNumberHome;
+    private int bookingNumberHotel, bookingNumberTour;
     private List<String> availableSeatListOut, availableSeatListHome;
     private TripFlight flightOut, flightHome;
     List<Passenger> passengersOut = new ArrayList<>();
@@ -121,7 +129,7 @@ public class UserDisplayController implements Initializable {
         
         this.totalFlightPrice = (trip.getOutFlight().getAdultPrice()+trip.getHomeFlight().getAdultPrice())*adults 
                 + (trip.getOutFlight().getChildPrice() + trip.getHomeFlight().getChildPrice())*childs;
-        this.totalHotelPrice = trip.getHotel().getAdultPrice()*adults + trip.getHotel().getChildPrice()*childs;
+        this.totalHotelPrice = trip.getHotel().getTotalPrice();
         this.totalTourPrice = trip.getTour().getAdultPrice()*adults + trip.getTour().getChildPrice()*childs;
         this.totalPrice = totalFlightPrice + totalHotelPrice + totalTourPrice;
         
@@ -270,18 +278,34 @@ public class UserDisplayController implements Initializable {
     
     @FXML
     public void completeBooking(ActionEvent event) {
+        // Bóka flug --- 
         String cardHolder = cardholder.getText().trim();
         String cardNumber = cardnumber.getText().trim();
         String expMonth = experationMonth.getSelectionModel().getSelectedItem().trim();
         String expYear = experationYear.getSelectionModel().getSelectedItem().trim();
         LocalDate expDay = getExpDay(expMonth, expYear);
         String csv = ccvNumber.getText();
-        
         // Book flight Out 
         Booking bookingOut = new Booking(flightOut.getFlight(), passengersOut, cardHolder, cardNumber, expDay, csv);
         // Book flight home
         Booking booingHome = new Booking(flightHome.getFlight(), passengersHome, cardHolder, cardNumber, expDay, csv);
         bookFlight(passengersOut, passengersHome, bookingOut, booingHome);
+        
+        // Bóka hótel
+        int roomID = trip.getHotel().getRoomnr();
+        Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String start = formatter.format(trip.getHotel().getStartDate());
+        String end = formatter.format(trip.getHotel().getEndDate());
+        String user = cardHolder;
+        createBooking( roomID, start, end , user ); 
+        this.bookingNumberHotel = roomID;
+        
+        
+        
+        // Bóka Tour
+        
+        
+        
         bookingConfirmed();
         Stage stage = (Stage) confirmBooking.getScene().getWindow();
         stage.close();
@@ -364,7 +388,7 @@ public class UserDisplayController implements Initializable {
     
     private void bookingConfirmed(){
         try {
-        BookingConfirmedController bookingConfirm = new BookingConfirmedController(bookingNumberOut, bookingNumberHome, totalPrice );
+        BookingConfirmedController bookingConfirm = new BookingConfirmedController(bookingNumberOut, bookingNumberHome, bookingNumberHotel, bookingNumberTour, totalPrice );
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BookingConfirmed.fxml"));
         fxmlLoader.setController(bookingConfirm);
         Parent root3 = (Parent) fxmlLoader.load();

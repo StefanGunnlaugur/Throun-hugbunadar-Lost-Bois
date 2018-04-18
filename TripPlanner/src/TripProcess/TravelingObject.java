@@ -1,4 +1,4 @@
-package search;
+package TripProcess;
 import java.util.Date;
 
 public class TravelingObject {
@@ -8,7 +8,7 @@ public class TravelingObject {
     private int adultPrice, childPrice;
     
     public TravelingObject(String ID, Date SD, Date ED, String location, 
-            int audltPrice, int childPrice, double rating) {
+        int audltPrice, int childPrice, double rating) {
         this.id = ID; 
         this.startDate=SD;
         this.endDate=ED;
@@ -24,7 +24,7 @@ public class TravelingObject {
         switch(this.location) {
             case "Reykjavík": lat = 64.132716;
             break;
-            case "Akureyri": lat = 65.654509;
+            case "Akureyri": lat = 65.683530;
             break;
             case "Nuuk": lat = 64.18347;
             break;
@@ -36,7 +36,11 @@ public class TravelingObject {
             break;
             case "Ísafjörður": lat = 66.061106;
             break;
+            case "Isafjörður": lat = 66.061106;
+            break;
             case "Egilsstaðir": lat = 65.266874;
+            break;
+            case "Egilsstadir": lat = 65.266874;
             break;
             case "Kulusuk": lat = 65.568090;
             break;
@@ -62,7 +66,11 @@ public class TravelingObject {
             break;
             case "Ísafjörður": lon = -23.188860;
             break;
+            case "Isafjörður": lon = -23.188860;
+            break;
             case "Egilsstaðir": lon = -14.394847;
+            break;
+            case "Egilsstadir": lon = -14.394847;
             break;
             case "Kulusuk": lon = -37.187300;
             break;

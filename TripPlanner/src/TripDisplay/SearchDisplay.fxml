@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="798.0" prefWidth="1117.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TripDisplay.SearchDisplayController">
+   <children>
+      <Button fx:id="search" layoutX="957.0" layoutY="33.0" mnemonicParsing="false" onAction="#search" prefHeight="25.0" prefWidth="100.0" text="Leita" />
+      <Button fx:id="book" disable="true" layoutX="834.0" layoutY="748.0" mnemonicParsing="false" onAction="#bookTrip" prefHeight="40.0" prefWidth="94.0" text="Bóka" />
+      <DatePicker fx:id="startDate" layoutX="46.0" layoutY="33.0" prefHeight="25.0" prefWidth="122.0" showWeekNumbers="true" />
+      <ChoiceBox fx:id="destination" layoutX="734.0" layoutY="33.0" prefHeight="19.0" prefWidth="194.0" />
+      <DatePicker fx:id="endDate" layoutX="192.0" layoutY="33.0" prefHeight="25.0" prefWidth="122.0" />
+      <Label layoutX="46.0" layoutY="13.0" prefHeight="17.0" prefWidth="122.0" text="Brottför" />
+      <Label layoutX="192.0" layoutY="13.0" prefHeight="17.0" prefWidth="122.0" text="Heimför" />
+      <Label layoutX="734.0" layoutY="13.0" prefHeight="17.0" prefWidth="194.0" text="Áfangastaður" />
+      <Label fx:id="totalPrice" layoutX="432.0" layoutY="758.0" prefHeight="17.0" prefWidth="394.0" text="Heildarverð: ">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <Label layoutX="526.0" layoutY="13.0" prefHeight="17.0" prefWidth="194.0" text="Brottfararstaður" />
+      <ChoiceBox fx:id="departure" layoutX="526.0" layoutY="33.0" prefHeight="19.0" prefWidth="194.0" />
+      <TabPane layoutX="46.0" layoutY="78.0" prefHeight="668.0" prefWidth="1011.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="generatedTrips" text="Tilbúnar ferðir">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="356.0" prefWidth="908.0">
+                     <children>
+                        <TableView fx:id="trips" layoutX="2.0" layoutY="50.0" onMouseClicked="#selectedTrip" prefHeight="581.0" prefWidth="1011.0">
+                          <columns>
+                            <TableColumn fx:id="tripsSDcolumn" prefWidth="83.0" text="Brottför" />
+                            <TableColumn fx:id="tripsEDcolumn" prefWidth="88.0" text="Heimkoma" />
+                              <TableColumn fx:id="tripsDeparturecolumn" prefWidth="119.0" text="Brottfarar Staður" />
+                              <TableColumn fx:id="tripsDestinationcolumn" prefWidth="106.0" text="Áfangastaður" />
+                              <TableColumn fx:id="tripsHotelcolumn" minWidth="0.0" prefWidth="118.0" text="Hótel" />
+                              <TableColumn fx:id="tripsTourcolumn" prefWidth="115.0" text="Dagsferð" />
+                              <TableColumn fx:id="tripsTourDatecolumn" prefWidth="96.0" text="Dagur ferðar" />
+                              <TableColumn fx:id="tripsRatingcolumn" prefWidth="53.0" text="Einkunn" />
+                              <TableColumn prefWidth="229.0" text="Verð">
+                                 <columns>
+                                    <TableColumn fx:id="tripsAdultPricecolumn" prefWidth="75.0" text="Fullorðnir" />
+                                    <TableColumn fx:id="tripsChildPricecolumn" prefWidth="73.0" text="Börn" />
+                                    <TableColumn fx:id="tripsHotelPricecolumn" prefWidth="73.0" text="Gisting" />
+                                 </columns>
+                              </TableColumn>
+                          </columns>
+                        </TableView>
+                        <TextField fx:id="minRating" layoutX="290.0" layoutY="14.0" />
+                        <TextField fx:id="maxPrice" layoutX="622.0" layoutY="14.0" />
+                        <Button fx:id="filterTrips" layoutX="889.0" layoutY="14.0" mnemonicParsing="false" onAction="#filterTrips" prefHeight="25.0" prefWidth="104.0" text="Sýja ferðir" />
+                        <Label layoutX="189.0" layoutY="18.0" prefHeight="17.0" prefWidth="94.0" text="Lágmarks einkun:" />
+                        <Label layoutX="532.0" layoutY="18.0" prefHeight="17.0" prefWidth="84.0" text="Hámarks verð:" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="createTrip" text="Búa til ferð">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="661.0" prefWidth="1011.0">
+                     <children>
+                        <TableView fx:id="flightsHome" centerShape="false" layoutX="512.0" layoutY="45.0" onMouseClicked="#selectedHomeFlight" prefHeight="270.0" prefWidth="497.0">
+                           <columns>
+                              <TableColumn fx:id="flHomeDateColumn" editable="false" prefWidth="84.0" resizable="false" text="Brottför" />
+                              <TableColumn editable="false" minWidth="109.0" prefWidth="156.0" resizable="false" text="Flug">
+                                 <columns>
+                                    <TableColumn fx:id="flHomeOriginColumn" editable="false" minWidth="75.0" prefWidth="33.0" resizable="false" text="Frá" />
+                                    <TableColumn fx:id="flHomeDestinationColumn" editable="false" minWidth="75.0" prefWidth="20.0" resizable="false" text="Til" />
+                                 </columns>
+                              </TableColumn>
+                              <TableColumn fx:id="flHomeAirlineColumn" editable="false" minWidth="0.0" prefWidth="99.0" resizable="false" text="Flugélag" />
+                              <TableColumn fx:id="flHomeRatingColumn" editable="false" minWidth="0.0" prefWidth="32.0" resizable="false" text="★" />
+                              <TableColumn editable="false" prefWidth="126.0" resizable="false" text="Verð (ISK)">
+                                 <columns>
+                                    <TableColumn fx:id="flHomeAdultPriceColumn" editable="false" prefWidth="64.0" resizable="false" text="Fullorðnir" />
+                                    <TableColumn fx:id="flHomeChildPriceColumn" editable="false" prefWidth="60.0" resizable="false" text="Börn" />
+                                 </columns>
+                              </TableColumn>
+                           </columns>
+                        </TableView>
+                        <Label layoutX="14.0" layoutY="334.0" prefHeight="17.0" prefWidth="55.0" text="Hótel">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label layoutX="512.0" layoutY="334.0" prefHeight="17.0" prefWidth="60.0" text="Dagsferð">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label layoutX="14.0" layoutY="20.0" prefHeight="17.0" prefWidth="120.0" text="Flug, brottför">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <Label layoutX="506.0" layoutY="20.0" prefHeight="17.0" prefWidth="94.0" text="Flug Heimför">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <TableView fx:id="flightsOut" layoutY="45.0" onMouseClicked="#selectedOutFlight" prefHeight="270.0" prefWidth="497.0">
+                           <columns>
+                              <TableColumn fx:id="flOutDateColumn" editable="false" prefWidth="88.0" resizable="false" text="Brottför" />
+                              <TableColumn editable="false" minWidth="106.0" prefWidth="149.0" resizable="false" text="Flug">
+                                 <columns>
+                                    <TableColumn fx:id="flOutOriginColumn" editable="false" minWidth="75.0" prefWidth="78.0" resizable="false" text="Frá" />
+                                    <TableColumn fx:id="flOutDestinationColumn" editable="false" minWidth="75.0" prefWidth="45.0" resizable="false" text="Til" />
+                                 </columns>
+                              </TableColumn>
+                              <TableColumn fx:id="flOutAirlineColumn" editable="false" minWidth="0.0" prefWidth="93.0" resizable="false" text="Flugélag" />
+                              <TableColumn fx:id="flOutRatingColumn" editable="false" minWidth="0.0" prefWidth="31.0" resizable="false" text="★" />
+                              <TableColumn editable="false" minWidth="91.0" prefWidth="91.0" resizable="false" text="Verð (ISK)">
+                                 <columns>
+                                    <TableColumn fx:id="flOutAdultPriceColumn" editable="false" minWidth="50.0" prefWidth="65.0" resizable="false" text="Fullorðnir" />
+                                    <TableColumn fx:id="flOutChildPriceColumn" editable="false" minWidth="50.0" prefWidth="61.0" resizable="false" text="Börn" />
+                                 </columns>
+                              </TableColumn>
+                           </columns>
+                        </TableView>
+                        <TableView fx:id="hotels" layoutY="367.0" onMouseClicked="#selectedHotel" prefHeight="270.0" prefWidth="497.0">
+                           <columns>
+                              <TableColumn fx:id="hotelNameColumn" editable="false" prefWidth="105.0" resizable="false" text="Nafn" />
+                              <TableColumn fx:id="hotelDateColumn" editable="false" minWidth="0.0" prefWidth="126.0" resizable="false" text="Bókun herbergis" />
+                              <TableColumn fx:id="hotelLocationColumn" editable="false" minWidth="0.0" prefWidth="126.0" resizable="false" text="Staðsetning" />
+                              <TableColumn fx:id="hotelRatingColumn" editable="false" minWidth="0.0" prefWidth="40.0" resizable="false" text="★" />
+                              <TableColumn fx:id="hotelTotalPriceColumn" editable="false" prefWidth="86.0" resizable="false" text="Verð (ISK)" />
+                           </columns>
+                        </TableView>
+                        <TableView fx:id="tours" layoutX="512.0" layoutY="367.0" onMouseClicked="#selectedTour" prefHeight="270.0" prefWidth="497.0">
+                           <columns>
+                              <TableColumn fx:id="tourNameColumn" editable="false" prefWidth="120.0" resizable="false" text="Nafn" />
+                              <TableColumn fx:id="tourDateColumn" editable="false" minWidth="0.0" prefWidth="119.0" resizable="false" text="Dagsetning &amp; tími" />
+                              <TableColumn fx:id="tourLocationColumn" editable="false" minWidth="0.0" prefWidth="94.0" resizable="false" text="Staðsetning" />
+                              <TableColumn fx:id="tourRatingColumn" editable="false" minWidth="0.0" prefWidth="33.0" resizable="false" text="★" />
+                              <TableColumn editable="false" prefWidth="103.0" resizable="false" text="Verð (ISK)">
+                                 <columns>
+                                    <TableColumn fx:id="tourAdultPriceColumn" editable="false" prefWidth="61.0" resizable="false" text="Fullorðnir" />
+                                    <TableColumn fx:id="tourChildPriceColumn" editable="false" prefWidth="59.0" resizable="false" text="Börn" />
+                                 </columns>
+                              </TableColumn>
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <Label layoutX="350.0" layoutY="13.0" prefHeight="17.0" prefWidth="69.0" text="Fullorðnir:" />
+      <TextField fx:id="adults" layoutX="350.0" layoutY="34.0" onAction="#search" prefHeight="25.0" prefWidth="49.0" text="1" />
+      <Label layoutX="436.0" layoutY="13.0" prefHeight="17.0" prefWidth="69.0" text="Börn:" />
+      <TextField fx:id="childs" layoutX="436.0" layoutY="34.0" onAction="#search" prefHeight="25.0" prefWidth="49.0" text="0" />
+   </children>
+</AnchorPane>

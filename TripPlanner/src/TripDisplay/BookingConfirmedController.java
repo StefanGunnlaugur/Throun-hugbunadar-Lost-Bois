@@ -1,3 +1,5 @@
+package TripDisplay;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -20,7 +22,7 @@ import javafx.stage.Stage;
  */
 public class BookingConfirmedController implements Initializable {
     Long flightOutBookingID,flightHomeBookingID;
-    int price;
+    int price, bookingNumberHotel, bookingNumberTour;
     
     @FXML
     private Button close;
@@ -35,9 +37,11 @@ public class BookingConfirmedController implements Initializable {
     @FXML
     private Label totalPrice;
 
-    BookingConfirmedController(Long flOutBookingID, Long flHomeBookingID, int price ) {
+    BookingConfirmedController(Long flOutBookingID, Long flHomeBookingID, int hBookingID, int tBookingID, int price ) {
         this.flightOutBookingID = flOutBookingID;
         this.flightHomeBookingID = flHomeBookingID;
+        this.bookingNumberHotel = hBookingID;
+        this.bookingNumberTour = tBookingID;
         this.price = price;
     }
     
@@ -48,6 +52,8 @@ public class BookingConfirmedController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         flightOutID.setText(flightOutID.getText() + flightOutBookingID);
         flightHomeID.setText(flightHomeID.getText() + flightHomeBookingID);
+        hotelId.setText(hotelId.getText() + bookingNumberHotel);
+        tourId.setText(tourId.getText() + bookingNumberTour);
         totalPrice.setText(totalPrice.getText() + price + "kr");
     }
     

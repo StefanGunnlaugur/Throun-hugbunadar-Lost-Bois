@@ -1,4 +1,8 @@
+package TripProcess;
 
+
+import TripProcess.User;
+import TripProcess.Trip;
 import java.util.Date;
 
 public class TripBooking {

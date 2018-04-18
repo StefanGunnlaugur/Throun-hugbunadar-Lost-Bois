@@ -1,4 +1,8 @@
+package TripDisplay;
 
+import TripProcess.Results;
+import TripProcess.CreateTrips;
+import TripProcess.Trip;
 import java.net.URL;
 import java.time.LocalDate;
 import static java.time.LocalDate.now;
@@ -27,12 +31,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import search.TripFlight;
-import search.FlightSearch;
-import search.Hotel;
-import search.HotelSearch;
-import search.Tour;
-import search.TourSearch;
+import TripProcess.TripFlight;
+import TripProcess.FlightSearch;
+import TripProcess.TripHotel;
+import TripProcess.HotelSearch;
+import TripProcess.Tour;
+import TripProcess.TourSearch;
+import TripProcess.Trip;
 
 /**
  * FXML Controller class
@@ -44,12 +49,12 @@ public class SearchDisplayController implements Initializable {
     private ObservableList<Trip> awailabletrips = FXCollections.observableArrayList();
     private ObservableList<TripFlight> awailableflightsOut = FXCollections.observableArrayList();
     private ObservableList<TripFlight> awailableflightsHome = FXCollections.observableArrayList();
-    private ObservableList<Hotel> awailablehotels = FXCollections.observableArrayList();
+    private ObservableList<TripHotel> awailablehotels = FXCollections.observableArrayList();
     private ObservableList<Tour> awailabletours = FXCollections.observableArrayList();
     private Trip selectedTrip = null; 
     private TripFlight selectedOutFlight = null;
     private TripFlight selectedHomeFlight = null;
-    private Hotel selectedHotel = null;
+    private TripHotel selectedHotel = null;
     private Tour selectedTour = null;
     private int selectedAdults = 1, selectedChilds = 0; 
     
@@ -113,17 +118,16 @@ public class SearchDisplayController implements Initializable {
     private TableView hotels;
     
     @FXML
-    private TableColumn<Hotel, String> hotelNameColumn;
+    private TableColumn<TripHotel, String> hotelNameColumn;
     @FXML
-    private TableColumn<Hotel, String> hotelDateColumn;
+    private TableColumn<TripHotel, String> hotelDateColumn;
     @FXML
-    private TableColumn<Hotel, String> hotelLocationColumn;
+    private TableColumn<TripHotel, String> hotelLocationColumn;
     @FXML
-    private TableColumn<Hotel, Double> hotelRatingColumn;
+    private TableColumn<TripHotel, Double> hotelRatingColumn;
     @FXML
-    private TableColumn<Hotel, Integer> hotelAdultPriceColumn;
-    @FXML
-    private TableColumn<Hotel, Integer> hotelChildPriceColumn;
+    private TableColumn<TripHotel, Integer> hotelTotalPriceColumn;
+    
     
     @FXML
     private TableView tours;
@@ -162,7 +166,9 @@ public class SearchDisplayController implements Initializable {
     private TableColumn<Trip, Integer> tripsAdultPricecolumn;
     @FXML
     private TableColumn<Trip, Integer> tripsChildPricecolumn;
-   
+    @FXML
+    private TableColumn<Trip,Integer> tripsHotelPricecolumn;
+    
     
     @FXML
     private TextField minRating;
@@ -177,6 +183,8 @@ public class SearchDisplayController implements Initializable {
     @FXML
     private Label totalPrice;
     
+    
+    
      /**
      * Initializes the controller class.
      */
@@ -188,9 +196,31 @@ public class SearchDisplayController implements Initializable {
     }
     
     public void loadTables(Date SD, Date ED, String depart, String dest) {
+        
+        LocalDate sDate = null, eDate = null;
+        if(SD!=null){
+            sDate = SD.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
+        if(ED!=null){
+            eDate = ED.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
+        if(SD==null && ED==null){
+            sDate=LocalDate.of(2018,05,1);
+            eDate=sDate.plusWeeks(1);
+        } else if(SD==null) {
+            eDate=sDate.minusWeeks(1);
+        } else if(ED==null) {
+            sDate = eDate.plusWeeks(1);
+        } 
+        startDate.setValue(sDate);
+        endDate.setValue(eDate);
+        
+        SD = Date.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        ED = Date.from(eDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                
         FlightSearch fsOut = new FlightSearch(SD, depart, dest);
         FlightSearch fsHome = new FlightSearch(ED, dest, depart);
-        HotelSearch hs = new HotelSearch(SD, ED, dest);
+        HotelSearch hs = new HotelSearch(SD, ED, dest, selectedAdults, selectedChilds);
         TourSearch ts = new TourSearch(SD, ED, dest);
          
         ArrayList<TripFlight> searchFlightsOut = fsOut.returnFlights();
@@ -201,7 +231,7 @@ public class SearchDisplayController implements Initializable {
         awailableflightsHome = FXCollections.observableArrayList(searchFlightsHome);
         showHomeFlights(awailableflightsHome);
         
-        ArrayList<Hotel> searchHotels = hs.getHotels();
+        ArrayList<TripHotel> searchHotels = hs.getHotels();
         awailablehotels = FXCollections.observableArrayList(searchHotels);
         showHotels(awailablehotels);
               
@@ -218,15 +248,13 @@ public class SearchDisplayController implements Initializable {
     public void search(ActionEvent event){
         Date SD = null, ED = null;
         String depart = null, dest = null;
-        if (startDate.getValue()==null){
-            startDate.setValue(now());
+        
+        if(startDate.getValue()!=null){
+            SD = Date.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         }
-        SD = Date.from(startDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-                
-        if(endDate.getValue()==null){
-            endDate.setValue(now().plusWeeks(1));
+        if(endDate.getValue()!=null){
+            ED = Date.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         }
-        ED = Date.from(endDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         
         if(departure.getSelectionModel().getSelectedItem()!=null){
             depart = departure.getSelectionModel().getSelectedItem();
@@ -235,6 +263,7 @@ public class SearchDisplayController implements Initializable {
             dest = destination.getSelectionModel().getSelectedItem();
         }
         loadTables(SD, ED, depart, dest);
+        updatePrice();
     }
     
     @FXML
@@ -263,7 +292,7 @@ public class SearchDisplayController implements Initializable {
     @FXML
     public void selectedHotel(MouseEvent event){
         this.selectedTrip = null;
-        this.selectedHotel = (Hotel) hotels.getSelectionModel().getSelectedItem();
+        this.selectedHotel = (TripHotel) hotels.getSelectionModel().getSelectedItem();
         updatePrice();
         tryMakingTrip();
     }
@@ -329,9 +358,9 @@ public class SearchDisplayController implements Initializable {
         showTrips(res.filter(awailabletrips));
     }
     
-    @FXML
     public void peopleChanged() {
-        updatePrice();        
+        
+        /// Færa í search action handler 
     }
     
     public void showTrips(ObservableList<Trip> showTrips) {
@@ -345,7 +374,8 @@ public class SearchDisplayController implements Initializable {
         tripsTourDatecolumn.setCellValueFactory(new PropertyValueFactory<>("tourDate"));
         tripsRatingcolumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         tripsAdultPricecolumn.setCellValueFactory(new PropertyValueFactory<>("adultPrice"));
-        tripsChildPricecolumn.setCellValueFactory(new PropertyValueFactory<>("childPrice"));        
+        tripsChildPricecolumn.setCellValueFactory(new PropertyValueFactory<>("childPrice")); 
+        tripsHotelPricecolumn.setCellValueFactory(new PropertyValueFactory<>("hotelTotalPrice"));
     }
     
     public void showOutFlights(ObservableList<TripFlight> showFlights) {
@@ -370,11 +400,10 @@ public class SearchDisplayController implements Initializable {
         flHomeChildPriceColumn.setCellValueFactory(new PropertyValueFactory<>("childPrice"));
     }
     
-    public void showHotels(ObservableList<Hotel> showHotels) {
+    public void showHotels(ObservableList<TripHotel> showHotels) {
         hotels.setItems(showHotels);
         hotelNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        hotelAdultPriceColumn.setCellValueFactory(new PropertyValueFactory<>("adultPrice"));
-        hotelChildPriceColumn.setCellValueFactory(new PropertyValueFactory<>("childPrice"));
+        hotelTotalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
         hotelDateColumn.setCellValueFactory(new PropertyValueFactory<>("shortDate"));
         hotelLocationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         hotelRatingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
@@ -391,7 +420,7 @@ public class SearchDisplayController implements Initializable {
     }
 
     private void updatePrice() {
-        double totPrice = 0;
+        int totPrice = 0;
         if(!adults.getText().trim().isEmpty()) {
           this.selectedAdults = Integer.parseInt(adults.getText().trim());
         } 
@@ -400,7 +429,8 @@ public class SearchDisplayController implements Initializable {
         } 
         if(this.selectedTrip!=null){
             totPrice = selectedTrip.getAdultPrice()*selectedAdults +
-                    selectedTrip.getChildPrice()*selectedChilds;
+                    selectedTrip.getChildPrice()*selectedChilds
+                    + selectedTrip.getHotel().getTotalPrice();
         }else {
             if(this.selectedOutFlight!=null){
                 totPrice = totPrice + selectedOutFlight.getAdultPrice()*selectedAdults +
@@ -411,8 +441,7 @@ public class SearchDisplayController implements Initializable {
                     selectedHomeFlight.getChildPrice()*selectedChilds;
             }
             if(this.selectedHotel!=null){
-                totPrice = totPrice + selectedHotel.getAdultPrice()*selectedAdults +
-                    selectedHotel.getChildPrice()*selectedChilds;
+                totPrice = totPrice + selectedHotel.getTotalPrice();
             }
             if(this.selectedTour!=null){
                 totPrice = totPrice + selectedTour.getAdultPrice()*selectedAdults +
@@ -463,12 +492,11 @@ public class SearchDisplayController implements Initializable {
             }
         };             
         startDate.setConverter(converter);
-        startDate.setValue(now());
         startDate.setPromptText(pattern.toLowerCase());
         startDate.requestFocus();
         endDate.setConverter(converter);
-        endDate.setValue(now().plusWeeks(1));
         endDate.setPromptText(pattern.toLowerCase());
         endDate.requestFocus();
     } 
+
 }

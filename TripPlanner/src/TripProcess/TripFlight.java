@@ -1,4 +1,4 @@
-package search;
+package TripProcess;
 
 import flightGroup.hopur9fvinnsla.Flight;
 import java.text.Format;

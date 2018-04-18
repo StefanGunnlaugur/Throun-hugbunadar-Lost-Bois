@@ -1,9 +1,12 @@
+package TripProcess;
 
+
+import TripProcess.Trip;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-class Results {
+public class Results {
     
     private ArrayList<Trip> resultTrips;
     private double maxPrice , minRating;
@@ -35,7 +38,7 @@ class Results {
     public ObservableList<Trip> filter(ObservableList<Trip> trips) {
         resultTrips = new ArrayList<>();
         for (Trip currTrip:trips) {
-            double price = adults*currTrip.getAdultPrice() + childs*currTrip.getChildPrice();
+            double price = adults*currTrip.getAdultPrice() + childs*currTrip.getChildPrice() + currTrip.getHotel().getTotalPrice();
 
             if (minRating <= currTrip.getRating() && maxPrice >= price) {
                 resultTrips.add(currTrip);

@@ -1,27 +1,28 @@
+package TripProcess;
+
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import static jdk.nashorn.internal.objects.NativeMath.round;
-import search.TripFlight;
-import search.Hotel;
-import search.Tour;
+import TripProcess.TripFlight;
+import TripProcess.TripHotel;
+import TripProcess.Tour;
 
 public class Trip {
 
     private Date startDate, endDate;
     private TripFlight outFlight;
     private TripFlight homeFlight;
-    private Hotel hotel;
+    private TripHotel hotel;
     private Tour tour;
     private String hotelName, tourName, departure, destination, 
             shortStartDate, shortEndDate, tourDate;
     private double rating; 
-    private int adultPrice, childPrice;
+    private int adultPrice, childPrice, hotelTotalPrice;
     
-    public Trip (TripFlight outFlight, TripFlight homeFlight , Hotel hotel, Tour tour) {
+    public Trip (TripFlight outFlight, TripFlight homeFlight , TripHotel hotel, Tour tour) {
         
         this.outFlight = outFlight;
         this.homeFlight = homeFlight; 
@@ -41,9 +42,10 @@ public class Trip {
         this.rating = avgRating/10;
         
         this.adultPrice = outFlight.getAdultPrice() + homeFlight.getAdultPrice()
-                + hotel.getAdultPrice() + tour.getAdultPrice();
+                + tour.getAdultPrice();
         this.childPrice = outFlight.getChildPrice() + homeFlight.getChildPrice()
-                + hotel.getChildPrice() + tour.getChildPrice();
+                + tour.getChildPrice();
+        this.hotelTotalPrice = hotel.getTotalPrice();
         Format formatter = new SimpleDateFormat("dd-MMM HH:mm");
         this.shortStartDate = formatter.format(startDate);
         this.shortEndDate = formatter.format(endDate);
@@ -91,7 +93,11 @@ public class Trip {
     }
     
     public int getChildPrice() {
-        return this.childPrice;
+        return childPrice;
+    }
+    
+    public int getHotelTotalPrice() {
+        return hotelTotalPrice;
     }
     
     public double getRating() {
@@ -106,7 +112,7 @@ public class Trip {
         return homeFlight;
     }
     
-    public Hotel getHotel() {
+    public TripHotel getHotel() {
         return hotel;
     }
     
