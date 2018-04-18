@@ -28,7 +28,6 @@ public class TourSearch {
 
         
         Random r = new Random();
-   
         Gagnagrunnur gagnagrunnur = new Gagnagrunnur();
         try {
             ResultSet rs = gagnagrunnur.getTrips();
@@ -39,14 +38,13 @@ public class TourSearch {
                     String id = rs.getInt("Id")+"";
                     String title = rs.getString("title");
                     int price = rs.getInt("price");
-                    long random = ThreadLocalRandom.current().nextLong(startDate.getTime(), endDate.getTime());
+                    long random = ThreadLocalRandom.current().nextLong(startDate.getTime()+21600000L, endDate.getTime()-21600000L);
                     Date date = new Date(random);  
                     double ratingFix = 1 + (5 - 1) * r.nextDouble();
                     ratingFix = Math.round(ratingFix*10);
 
                     Tour tour = new Tour(id, date, loc, price, ratingFix/10, title);
                     tours.add(tour);
-                    
                 }
             }            
         } catch (SQLException ex) {

@@ -6,7 +6,7 @@
 package daytourGroup.daytours;
 
 import daytourGroup.admin.AdminUIController;
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
+//import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import daytourGroup.database.Gagnagrunnur;
 import java.net.URL;
 import java.sql.Date;
