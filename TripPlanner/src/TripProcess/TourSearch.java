@@ -34,7 +34,8 @@ public class TourSearch {
             ResultSet rs = gagnagrunnur.getTrips();
             while (rs.next()) {
                 String loc = rs.getString("departures");
-                if(location==null || loc==location){
+                if (loc.equals("Reykjavik")){loc="Reykjavík";}
+                if(location==null || location.isEmpty() || loc.equals(location)){
                     String id = rs.getInt("Id")+"";
                     String title = rs.getString("title");
                     int price = rs.getInt("price");

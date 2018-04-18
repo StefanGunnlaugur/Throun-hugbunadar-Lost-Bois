@@ -37,7 +37,8 @@ public class HotelSearch {
             String hotelLocat = hotel.getLocationOfHotel(); 
             if(hotelLocat.equals("Egilsstadir")) { hotelLocat = "Egilsstaðir";}
             if(hotelLocat.equals("Isafjördur")) { hotelLocat = "Ísafjörður";}
-            if(location== null || location.isEmpty() || hotelLocat.equals(location)) {
+            if(hotelLocat.equals("Húsafell")) { hotelLocat = "Húsavík";}
+            if(location==null || location.isEmpty() || hotelLocat.equals(location)) {
                 double ratingFix = 1 + (5 - 1) * r.nextDouble();
                 ratingFix = Math.round(ratingFix*10);
                 for( Room room : hotel.rooms){

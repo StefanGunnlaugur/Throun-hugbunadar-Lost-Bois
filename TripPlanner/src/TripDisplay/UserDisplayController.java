@@ -37,10 +37,14 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import TripProcess.TripFlight;
+import daytourGroup.database.Gagnagrunnur;
+import daytourGroup.utils.Book;
 import hotelGroup.databases.DatabaseConnection;
 import static hotelGroup.databases.DatabaseConnection.createBooking;
+import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 
 /**
  * FXML Controller class
@@ -234,9 +238,22 @@ public class UserDisplayController implements Initializable {
     
     @FXML // Get inputs for passegner, add to lists
     public void luggageChanged(ActionEvent event) {
-        int handLuggage = Integer.parseInt(handbagsNr.getText().trim());
-        int luggage = Integer.parseInt(bagsNr.getText().trim());
+        int handLuggage = 0, luggage = 0;  
+        if(!handbagsNr.getText().trim().isEmpty()) {
+            handLuggage = Integer.parseInt(handbagsNr.getText().trim());
+            if(handLuggage < 0){
+                handLuggage = 0;
+            }
+        }
+        if(!bagsNr.getText().trim().isEmpty()) {
+            luggage = Integer.parseInt(bagsNr.getText().trim());
+            if(luggage < 0){
+                luggage = 0;
+            }
+        }
         int currPrice = totalFlightPrice + handLuggage*handLuggagePrice + luggage*luggagePrice;
+        handbagsNr.setText(handLuggage+"");
+        bagsNr.setText(luggage+"");
         flightPrice.setText("Flug verð: " + currPrice + "kr");        
     }
     
@@ -300,12 +317,23 @@ public class UserDisplayController implements Initializable {
         createBooking( roomID, start, end , user ); 
         this.bookingNumberHotel = roomID;
         
-        
-        
         // Bóka Tour
+
+        Gagnagrunnur db = new Gagnagrunnur();
+        Book connection = new Book();
+        connection.setDb(db);
         
-        
-        
+        int tourId = Integer.parseInt(trip.getTour().getID());
+        String tourName = trip.getTourName();
+        String email = passengersOut.get(0).getEmail();
+        int seatQt = adults + childs;
+        LocalDate tourDate = trip.getTour().getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        this.bookingNumberTour = tourId;
+        try {
+            connection.makeBooking(tourId, tourName, email, seatQt, tourDate);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDisplayController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         bookingConfirmed();
         Stage stage = (Stage) confirmBooking.getScene().getWindow();
         stage.close();
